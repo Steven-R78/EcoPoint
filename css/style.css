@@ -1,0 +1,158 @@
+/* ====== RESET ====== */
+/* Elimina márgenes por defecto */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+/* ====== BODY ====== */
+/* Configuración general */
+body {
+    background: #F5F5F5;
+    color: #2C3E50;
+}
+
+/* ====== HEADER ====== */
+/* Barra superior */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #2ECC71;
+    padding: 15px 30px;
+    color: white;
+}
+
+/* ====== LOGO ====== */
+/* Contenedor del logo */
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Círculo del logo */
+.logo-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #2ECC71;
+    font-weight: bold;
+}
+
+/* ====== NAV ====== */
+/* Enlaces del menú */
+nav a {
+    margin: 0 10px;
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+}
+
+/* ====== BOTÓN LOGIN ====== */
+/* Botón principal */
+.auth-btn {
+    background: #F39C12;
+    border: none;
+    padding: 8px 15px;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* ====== HERO ====== */
+/* Banner principal */
+.hero {
+    height: 400px;
+    background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
+                url('../assets/img/header.jpg');
+    background-size: cover;
+    background-position: center;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* ====== MAPA ====== */
+/* Sección mapa */
+.map-section {
+    padding: 40px;
+    background: white;
+}
+
+/* Barra de búsqueda */
+.search {
+    padding: 8px;
+    width: 100%;
+    margin-top: 10px;
+}
+
+/* Contenedor mapa */
+.map-container {
+    height: 300px;
+    background: #ccc;
+    border-radius: 10px;
+    margin-top: 15px;
+    position: relative;
+}
+
+/* Marcadores */
+.marker {
+    width: 15px;
+    height: 15px;
+    background: red;
+    border-radius: 50%;
+    position: absolute;
+}
+
+/* ====== FILTROS ====== */
+/* Botones de filtro */
+.filters button {
+    margin: 5px;
+    padding: 5px 10px;
+    border: none;
+    background: #3498DB;
+    color: white;
+    border-radius: 5px;
+}
+
+/* ====== GUÍA ====== */
+.guide {
+    padding: 40px;
+}
+
+/* Contenedor tarjetas */
+.cards {
+    display: flex;
+    gap: 20px;
+}
+
+/* Tarjetas */
+.card {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 200px;
+}
+
+/* ====== GAMIFICACIÓN ====== */
+.gamification {
+    padding: 40px;
+    background: #ecf0f1;
+}
+
+/* ====== FOOTER ====== */
+footer {
+    background: #2C3E50;
+    color: white;
+    padding: 20px;
+    text-align: center;
+}

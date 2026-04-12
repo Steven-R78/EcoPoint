@@ -1,11 +1,20 @@
 <!DOCTYPE html>
 <html lang="es">
 
+<head>
+    <meta charset="UTF-8">
+    <title>EcoPoint</title>
+
+    <!-- ====== ENLACE AL CSS EXTERNO ====== -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
 <body>
 
 <!-- ====== HEADER / NAVEGACIÓN ====== -->
 <header>
-    <div>
+    <div class="logo">
+        <div class="logo-circle">♻</div>
         <h2>EcoPoint</h2>
     </div>
 
@@ -17,53 +26,57 @@
         <a href="#">Mi Perfil</a>
     </nav>
 
-    <button>Login / Registro</button>
+    <button class="auth-btn">Login / Registro</button>
 </header>
 
 <!-- ====== HERO ====== -->
-<section>
+<section class="hero">
     <h1>EcoPoint - Plataforma de Reciclaje Comunitario</h1>
     <p>Encuentra puntos de reciclaje cercanos y gana recompensas</p>
     <button>Comenzar Ahora</button>
 </section>
 
 <!-- ====== MAPA INTERACTIVO ====== -->
-<section>
+<section class="map-section">
     <h2>Mapa de Reciclaje</h2>
 
-    <!-- Barra de búsqueda -->
-    <input type="text" placeholder="Buscar ubicación..." style="padding:8px; width:100%; margin-top:10px;">
+    <input type="text" placeholder="Buscar ubicación..." class="search">
 
-    <!-- Filtros -->
-    <div>
+    <div class="filters">
         <button>Plástico</button>
         <button>Papel</button>
         <button>Vidrio</button>
         <button>Electrónica</button>
     </div>
+
+    <div class="map-container">
+        <div class="marker" style="top:50px; left:100px;"></div>
+        <div class="marker" style="top:150px; left:200px;"></div>
+        <div class="marker" style="top:80px; left:300px;"></div>
+    </div>
 </section>
 
-<!-- ====== GUÍA DE RECICLAJE ====== -->
-<section>
+<!-- ====== GUÍA ====== -->
+<section class="guide">
     <h2>Guía de Reciclaje</h2>
 
-    <div>
-        <div>
+    <div class="cards">
+        <div class="card">
             <h3>¿Qué reciclar?</h3>
             <p>Materiales reutilizables como plástico, vidrio y papel.</p>
         </div>
 
-        <div>
+        <div class="card">
             <h3>¿Cómo clasificar?</h3>
             <p>Separar por tipo y limpiar antes de reciclar.</p>
         </div>
 
-        <div>
+        <div class="card">
             <h3>Impacto ambiental</h3>
             <p>Reduce contaminación y protege el planeta.</p>
         </div>
 
-        <div>
+        <div class="card">
             <h3>Tips verdes</h3>
             <p>Reduce, reutiliza y recicla en tu vida diaria.</p>
         </div>
@@ -71,14 +84,13 @@
 </section>
 
 <!-- ====== GAMIFICACIÓN ====== -->
-<section>
+<section class="gamification">
     <h2>Gamificación</h2>
 
     <p><strong>Puntos:</strong> 1250</p>
     <p><strong>Medallas:</strong> 🌱 ♻ 🌍</p>
 
-    <!-- Leaderboard -->
-    <div>
+    <div class="leaderboard">
         <h3>Top 5 recicladores</h3>
         <ol>
             <li>Juan - 2000 pts</li>
@@ -89,7 +101,6 @@
         </ol>
     </div>
 
-    <!-- Progreso -->
     <p>Progreso: 70%</p>
 </section>
 

@@ -4,8 +4,6 @@
 <head>
     <meta charset="UTF-8">
     <title>EcoPoint</title>
-
-    <!-- ====== ENLACE AL CSS EXTERNO ====== -->
     <link rel="stylesheet" href="css/style.css">
 </head>
 
@@ -14,16 +12,12 @@
     <!-- ====== HEADER / NAVEGACIÓN ====== -->
     <header>
         <div class="logo">
-            <a href="#" class="logo-link">
-                <!-- <div class="logo-circle">
-                    <img src="./assets/img/reciclaje_logo.png" alt="♻">
-                </div> -->
-                <span class="logo-circle">♻</span>
-                <span class="logo-text">EcoPoint</span>
-            </a>
+            <div class="logo-circle">♻</div>
+            <h2>EcoPoint</h2>
         </div>
 
         <nav>
+            <a href="#">Inicio</a>
             <a href="#">Mapa</a>
             <a href="#">Guía</a>
             <a href="#">Comunidad</a>
@@ -33,59 +27,71 @@
         <button class="auth-btn">Login / Registro</button>
     </header>
 
+    <!-- ====== CONTENIDO PRINCIPAL ====== -->
     <main>
 
         <!-- ====== HERO ====== -->
         <section class="hero">
-            <h1>EcoPoint - Plataforma de Reciclaje Comunitario</h1>
-            <p>Encuentra puntos de reciclaje cercanos y gana recompensas</p>
-            <button>Comenzar Ahora</button>
+            <div class="hero-content">
+                <h1>EcoPoint - Recicla con Propósito</h1>
+                <p>Encuentra puntos de reciclaje cercanos y gana recompensas</p>
+                <div class="hero-buttons">
+                    <a class="btn btn-primary" href="">
+                        Comenzar Ahora
+                        <svg class="icon" viewBox="0 0 24 24">
+                            <path d="M15 5l7 7-7 7M20 12H4" fill="none" stroke="currentColor" stroke-width="2.5" />
+                        </svg>
+                    </a>
+                </div>
+            </div>
         </section>
 
         <!-- ====== MAPA INTERACTIVO ====== -->
         <section class="map-section">
-            <h2>Mapa de Reciclaje</h2>
-
-            <input type="text" placeholder="Buscar ubicación..." class="search">
-
-            <div class="filters">
-                <button>Plástico</button>
-                <button>Papel</button>
-                <button>Vidrio</button>
-                <button>Electrónica</button>
-            </div>
-
-            <div class="map-container">
-                <div class="marker" style="top:50px; left:100px;"></div>
-                <div class="marker" style="top:150px; left:200px;"></div>
-                <div class="marker" style="top:80px; left:300px;"></div>
+            <h2>Encuentra Puntos de Reciclaje Cerca de Ti</h2>
+            <div class="map-card">
+                <input type="text" placeholder="Buscar ubicación..." class="search">
+                <div class="filters">
+                    <a href="#" class="filter active">Plástico</a>
+                    <a href="#" class="filter">Papel</a>
+                    <a href="#" class="filter">Vidrio</a>
+                    <a href="#" class="filter">Electrónica</a>
+                </div>
+                <div class="map-container">
+                    <iframe
+                        class="map-iframe"
+                        loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade"
+                        src="https://www.google.com/maps?q=Bogot%C3%A1%20Colombia&output=embed">
+                    </iframe>
+                </div>
             </div>
         </section>
 
         <!-- ====== GUÍA ====== -->
         <section class="guide">
             <h2>Guía de Reciclaje</h2>
-
-            <div class="cards">
-                <div class="card">
+            
+            <div class="cards guide-cards">
+                <article class="card guide-card">
                     <h3>¿Qué reciclar?</h3>
-                    <p>Materiales reutilizables como plástico, vidrio y papel.</p>
-                </div>
-
-                <div class="card">
+                    <p>Aprende qué materiales son reciclables y cuáles no. Plásticos, papel, vidrio y más.</p>
+                </article>
+            
+                <article class="card guide-card">
                     <h3>¿Cómo clasificar?</h3>
-                    <p>Separar por tipo y limpiar antes de reciclar.</p>
-                </div>
-
-                <div class="card">
+                    <p>Guía paso a paso para separar correctamente tus residuos en casa.</p>
+                </article>
+            
+                <article class="card guide-card">
                     <h3>Impacto ambiental</h3>
-                    <p>Reduce contaminación y protege el planeta.</p>
-                </div>
-
-                <div class="card">
+                    <p>Descubre cómo tu acción de reciclaje ayuda al planeta y a las comunidades.</p>
+                </article>
+            
+                <article class="card guide-card">
                     <h3>Tips verdes</h3>
-                    <p>Reduce, reutiliza y recicla en tu vida diaria.</p>
-                </div>
+                    <p>Consejos prácticos para reducir, reutilizar y reciclar en tu día a día.</p>
+                </article>
             </div>
         </section>
 
@@ -110,30 +116,29 @@
             <p>Progreso: 70%</p>
         </section>
 
-        <!-- ====== FOOTER ====== -->
-        <footer>
-            <div class="footer-container">
-                <div class="footer-section">
-                    <h3>EcoPoint ♻</h3>
-                    <p>Promoviendo el ODS 12: Producción y consumo responsables para un futuro sostenible.</p>
-                </div>
-
-                <div class="footer-section">
-                    <h4>Navegación</h4>
-                    <ul>
-                        <li><a href="#">Sobre nosotros</a></li>
-                        <li><a href="#">Contacto</a></li>
-                        <li><a href="#">Mapa de Puntos</a></li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="footer-bottom">
-                <p>&copy; 2026 EcoPoint - Hecho con 🌱 para el planeta</p>
-            </div>
-        </footer>
     </main>
 
-</body>
+    <!-- ====== FOOTER ====== -->
+    <footer>
+        <p>Sobre nosotros | Contacto | Redes sociales</p>
+        <p>ODS 12: Producción y consumo responsables</p>
+        <p>&copy; 2026 EcoPoint</p>
+    </footer>
 
+</body>
+<script>
+  const filterLinks = document.querySelectorAll('.filters .filter');
+
+  filterLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault(); // evita que el <a> recargue o suba al top
+
+      filterLinks.forEach(l => l.classList.remove('active'));
+      link.classList.add('active');
+
+      // aquí luego puedes llamar tu lógica real de filtrado del mapa
+      // console.log('Filtro seleccionado:', link.textContent.trim());
+    });
+  });
+</script>
 </html>

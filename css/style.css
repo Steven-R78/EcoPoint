@@ -10,8 +10,7 @@
 /* ====== BODY ====== */
 /* Configuración general */
 body {
-    background: #F5F5F5;
-    color: #2C3E50;
+    background: #fcfcfc;
 }
 
 /* ====== HEADER ====== */
@@ -22,7 +21,7 @@ header {
     align-items: center;
     background: #2ECC71;
     padding: 15px 30px;
-    color: white;
+    color: #fff;
 }
 
 /* ====== LOGO ====== */
@@ -38,7 +37,7 @@ header {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background: white;
+    background: #fff;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -51,7 +50,7 @@ header {
 nav a {
     margin: 0 10px;
     text-decoration: none;
-    color: white;
+    color: #fff;
     font-weight: bold;
 }
 
@@ -61,7 +60,7 @@ nav a {
     background: #F39C12;
     border: none;
     padding: 8px 15px;
-    color: white;
+    color: #fff;
     border-radius: 5px;
     cursor: pointer;
 }
@@ -69,78 +68,206 @@ nav a {
 /* ====== HERO ====== */
 /* Banner principal */
 .hero {
-    height: 400px;
-    background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
-                url('../assets/img/header.jpg');
-    background-size: cover;
+    position: relative;
+    background-image:
+        linear-gradient(90deg, rgba(46, 204, 113, 0.85), rgba(52, 152, 219, 0.85)),
+        url('../assets/img/header.jpg');
     background-position: center;
-    color: white;
+    background-size: cover;
+    background-repeat: no-repeat;
+    color: #fff;
     display: flex;
-    flex-direction: column;
+    text-align: center;
+    padding: 60px 40px;
+    overflow: hidden;
+}
+
+.hero::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 40px; /* menos altura, menos pronunciado */
+    background: #fcfcfc;
+    clip-path: polygon(0 100%, 100% 0, 100% 100%);
+}
+ 
+.hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+}
+
+.hero-content {
+    max-width: 800px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+}
+
+.hero h1 {
+    font-size: 70px;
+    font-weight: 700;
+}
+ 
+.hero p {
+    font-size: 20px;
+    margin-bottom: 30px;
+}
+
+.hero-buttons {
+    display: flex;
     justify-content: center;
-    align-items: center;
+}
+
+.btn {
+    display: inline-flex;
+    padding: 20px 25px;
+    border-radius: 10px;
+    font-weight: bold;
+    text-decoration: none;
+    transition: background 1s ease, color 1s ease;
+}
+ 
+.btn-primary {
+    background: #fff;
+    color: #2ECC71;
+}
+
+.btn-primary:hover {
+    background: #2ECC71;
+    color: #fff;
+}
+
+.icon {
+    width: 18px;
+    height: 18px;
+    vertical-align: middle;
+    margin-left: 8px; /* si va a la derecha del texto */
+}
+
+/* ====== BÚSQUEDA ====== */
+/* Barra de búsqueda */
+.search {
+    width: 98%;
+    padding: 14px 16px;
+    border-radius: 12px;
+    border: 1px solid #E5E7EB;
+    outline: none;
+    margin: 10px 10px;
+}
+
+/* ====== FILTROS ====== */
+/* Filtros de búsqueda */
+.filters {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding: 10px;
+}
+
+.filter {
+    padding: 10px 16px;
+    border-radius: 12px;
+    border: 1px solid #E5E7EB;
+    background: #EEF2F7;
+    color: #000000;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.filter:hover {
+    background: #E5E7EB;
+}
+
+.filter.active {
+    background: #2ECC71;
+    color: #fff;
 }
 
 /* ====== MAPA ====== */
 /* Sección mapa */
 .map-section {
-    padding: 40px;
-    background: white;
+    padding: 40px 20px;
+    background: transparent;
 }
 
-/* Barra de búsqueda */
-.search {
-    padding: 8px;
-    width: 100%;
-    margin-top: 10px;
+/* Título de la sección mapa */
+.map-section h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 20px;
+    color: #000000;
 }
 
-/* Contenedor mapa */
+/* La “tarjeta” blanca */
+.map-card {
+    max-width: 1100px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.219);
+}
+
+/* Mapa dentro de la tarjeta */
 .map-container {
-    height: 300px;
-    background: #ccc;
-    border-radius: 10px;
-    margin-top: 15px;
+    margin-top: 18px;
+    height: 420px;
+    background: #D1D5DB;
     position: relative;
 }
 
-/* Marcadores */
-.marker {
-    width: 15px;
-    height: 15px;
-    background: red;
-    border-radius: 50%;
-    position: absolute;
-}
-
-/* ====== FILTROS ====== */
-/* Botones de filtro */
-.filters button {
-    margin: 5px;
-    padding: 5px 10px;
-    border: none;
-    background: #3498DB;
-    color: white;
-    border-radius: 5px;
+/* Estilo del iframe del mapa */
+.map-iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: block;
 }
 
 /* ====== GUÍA ====== */
 .guide {
-    padding: 40px;
+    padding: 60px;
 }
 
-/* Contenedor tarjetas */
-.cards {
+.guide h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 20px;
+    color: #000000;
+}
+
+/* Contenedor de tarjetas */
+.guide-cards {
+    max-width: 1100px;
+    margin: 0 auto;
     display: flex;
-    gap: 20px;
+    gap: 22px;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
-/* Tarjetas */
-.card {
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    width: 200px;
+/* Tarjeta */
+.guide-card {
+    background: #f7f7f7;
+    border-radius: 16px;
+    padding: 26px 22px;
+    width: 240px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.219);
+    text-align: justify;
+}
+
+.guide-card h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    color: #000;
+}
+
+.guide-card p {
+    color: #5f5f5f;
+    line-height: 1.55;
+    font-size: 14px;
 }
 
 /* ====== GAMIFICACIÓN ====== */
@@ -152,7 +279,7 @@ nav a {
 /* ====== FOOTER ====== */
 footer {
     background: #2C3E50;
-    color: white;
+    color: #fff;
     padding: 20px;
     text-align: center;
 }

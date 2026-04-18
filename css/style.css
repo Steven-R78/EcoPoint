@@ -17,6 +17,10 @@ body {
 /* ====== HEADER ====== */
 /* Barra superior */
 header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -30,7 +34,14 @@ header {
 .logo {
     display: flex;
     align-items: center;
-    gap: 10px;
+}
+
+.logo-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: inherit;
 }
 
 /* Círculo del logo */
@@ -44,15 +55,54 @@ header {
     justify-content: center;
     color: #2ECC71;
     font-weight: bold;
+    font-size: 22px;
+}
+
+.logo-circle image {
+    width: 10%;
+}
+
+.logo-text {
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: #FFFFFF;
 }
 
 /* ====== NAV ====== */
 /* Enlaces del menú */
+
+nav {
+    display: flex;
+    gap: 5px;
+}
+
 nav a {
     margin: 0 10px;
     text-decoration: none;
     color: white;
     font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+nav a > ::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 0;
+    left: 50%;
+    background-color: #2C3E50;
+    transition: all 0.3s ease-in-out;
+    transform: translateX(-50%);
+}
+
+nav a:hover {
+    color: #2C3E50;
+    padding-left: 5px;
+}
+
+nav a:hover::after {
+    width: 100%;
 }
 
 /* ====== BOTÓN LOGIN ====== */
@@ -70,8 +120,8 @@ nav a {
 /* Banner principal */
 .hero {
     height: 400px;
-    background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
-                url('../assets/img/header.jpg');
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+        url('../assets/img/header.jpg');
     background-size: cover;
     background-position: center;
     color: white;
@@ -153,6 +203,60 @@ nav a {
 footer {
     background: #2C3E50;
     color: white;
-    padding: 20px;
+    padding: 40px 20px 20px;
+}
+
+.footer-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 30px;
+}
+
+.footer-section {
+    flex: 1;
+    min-width: 250px;
+}
+
+.footer-section h3 {
+    color: #2ECC71;
+    margin-bottom: 15px;
+}
+
+.footer-section h4 {
+    margin-bottom: 15px;
+    border-bottom: 2px solid #2ECC71;
+    display: inline-block;
+    padding-bottom: 5px;
+}
+
+.footer-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-section ul li {
+    margin-bottom: 10px;
+}
+
+.footer-section a {
+    color: #bdc3c7;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.footer-section a:hover {
+    color: white;
+    padding-left: 5px;
+}
+
+.footer-bottom {
     text-align: center;
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 0.9rem;
+    color: #95a5a6;
 }

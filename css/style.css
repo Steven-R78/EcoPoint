@@ -13,6 +13,14 @@ body {
     background: #fcfcfc;
 }
 
+body.modal-open {
+    overflow: hidden;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
 /* ====== HEADER ====== */
 /* Barra superior */
 header {
@@ -55,10 +63,15 @@ header {
     color: #2ECC71;
     font-weight: bold;
     font-size: 22px;
+    overflow: hidden;
 }
 
-.logo-circle image {
-    width: 10%;
+.logo-image {
+    width: 68%;
+    height: 68%;
+    object-fit: contain;
+    display: block;
+    filter: invert(58%) sepia(73%) saturate(481%) hue-rotate(93deg) brightness(94%) contrast(91%);
 }
 
 .logo-text {
@@ -80,6 +93,28 @@ nav a {
     text-decoration: none;
     color: #fff;
     font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+nav a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 0;
+    left: 50%;
+    background-color: #2C3E50;
+    transition: all 0.3s ease-in-out;
+    transform: translateX(-50%);
+}
+
+nav a:hover {
+    color: #2C3E50;
+    padding-left: 5px;
+}
+
+nav a:hover::after {
+    width: 100%;
     transition: color 0.3s ease;
 }
 
@@ -107,12 +142,14 @@ nav a:hover::after {
 /* ====== BOTÓN LOGIN ====== */
 /* Botón principal */
 .auth-btn {
+    display: inline-block;
     background: #F39C12;
     border: none;
     padding: 8px 15px;
     color: #fff;
     border-radius: 5px;
     cursor: pointer;
+    text-decoration: none;
 }
 
 /* ====== HERO ====== */
@@ -128,21 +165,21 @@ nav a:hover::after {
     color: #fff;
     display: flex;
     text-align: center;
-    padding: 60px 40px;
+    padding: 100px 40px;
     overflow: hidden;
 }
 
 .hero::after {
     content: "";
     position: absolute;
-    bottom: 0;
+    bottom: -1px;
     left: 0;
     width: 100%;
-    height: 40px; /* menos altura, menos pronunciado */
+    height: 42px;
     background: #fcfcfc;
     clip-path: polygon(0 100%, 100% 0, 100% 100%);
 }
- 
+
 .hero::before {
     content: "";
     position: absolute;
@@ -241,6 +278,7 @@ nav a:hover::after {
 .map-section {
     padding: 40px 20px;
     background: transparent;
+    scroll-margin-top: 100px;
 }
 
 /* Título de la sección mapa */
@@ -278,52 +316,412 @@ nav a:hover::after {
 
 /* ====== GUÍA ====== */
 .guide {
-    padding: 60px;
+    padding: 70px 14px;
+    background: #ffffff;
+    scroll-margin-top: 100px;
 }
 
 .guide h2 {
     text-align: center;
-    margin-bottom: 30px;
+    margin-bottom: 58px;
     font-size: 20px;
     color: #000000;
+    font-weight: 600;
 }
 
 /* Contenedor de tarjetas */
 .guide-cards {
-    max-width: 1100px;
+    max-width: 1380px;
     margin: 0 auto;
-    display: flex;
-    gap: 22px;
-    flex-wrap: wrap;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(240px, 1fr));
+    gap: 30px;
 }
 
 /* Tarjeta */
 .guide-card {
     background: #f7f7f7;
     border-radius: 16px;
-    padding: 26px 22px;
-    width: 240px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.219);
-    text-align: justify;
+    padding: 30px 30px 28px;
+    min-height: 258px;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+    text-align: left;
+    cursor: pointer;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.guide-card:hover,
+.guide-card:focus-visible {
+    transform: translateY(-6px);
+    box-shadow: 0 18px 32px rgba(0, 0, 0, 0.12);
+    outline: none;
 }
 
 .guide-card h3 {
     font-size: 18px;
-    margin-bottom: 10px;
+    line-height: 1.2;
+    margin-bottom: 16px;
     color: #000;
+    font-weight: 700;
 }
 
 .guide-card p {
-    color: #5f5f5f;
-    line-height: 1.55;
+    color: #667085;
+    line-height: 1.45;
     font-size: 14px;
+    max-width: 250px;
+}
+
+.guide-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    margin-bottom: 24px;
+}
+
+.guide-icon svg {
+    width: 28px;
+    height: 28px;
+}
+
+.guide-icon.green {
+    background: #2ecc71;
+}
+
+.guide-icon.blue {
+    background: #3498db;
+}
+
+.guide-icon.orange {
+    background: #f39c12;
+}
+
+.guide-modal {
+    position: fixed;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    z-index: 2000;
+}
+
+.guide-modal.is-open {
+    display: flex;
+}
+
+.guide-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.52);
+}
+
+.guide-modal-dialog {
+    position: relative;
+    width: min(100%, 640px);
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 32px 30px 28px;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.22);
+    z-index: 1;
+}
+
+.guide-modal-dialog h3 {
+    font-size: 28px;
+    color: #0f172a;
+    margin-bottom: 18px;
+}
+
+.guide-modal-dialog p {
+    font-size: 16px;
+    line-height: 1.7;
+    color: #475569;
+}
+
+.guide-modal-close {
+    position: absolute;
+    top: 14px;
+    right: 16px;
+    border: none;
+    background: transparent;
+    color: #64748b;
+    font-size: 32px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.guide-modal-close:hover {
+    color: #0f172a;
+}
+
+@media (max-width: 1200px) {
+    .guide-cards {
+        grid-template-columns: repeat(2, minmax(240px, 1fr));
+    }
+}
+
+@media (max-width: 640px) {
+    .guide {
+        padding: 56px 16px;
+    }
+
+    .guide h2 {
+        margin-bottom: 36px;
+    }
+
+    .guide-cards {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .guide-card {
+        min-height: auto;
+        padding: 24px;
+    }
+
+    .guide-card h3 {
+        font-size: 18px;
+    }
+
+    .guide-card p {
+        font-size: 14px;
+        max-width: none;
+    }
+
+    .guide-modal-dialog {
+        padding: 28px 22px 24px;
+    }
+
+    .guide-modal-dialog h3 {
+        font-size: 24px;
+    }
+
+    .guide-modal-dialog p {
+        font-size: 15px;
+    }
 }
 
 /* ====== GAMIFICACIÓN ====== */
 .gamification {
-    padding: 40px;
-    background: #ecf0f1;
+    padding: 70px 24px;
+    background: #f3f3f3;
+    scroll-margin-top: 100px;
+}
+
+.gamification h2 {
+    text-align: center;
+    margin-bottom: 50px;
+    font-size: 20px;
+    color: #000000;
+}
+
+.gamification-grid {
+    max-width: 1380px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(280px, 1fr));
+    gap: 36px;
+}
+
+.reward-card {
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 30px 30px 34px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+    min-height: 480px;
+}
+
+.card-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 34px;
+}
+
+.card-title h3 {
+    font-size: 22px;
+    color: #001833;
+}
+
+.title-icon {
+    font-size: 28px;
+    color: #f39c12;
+    line-height: 1;
+}
+
+.points-card {
+    display: flex;
+    flex-direction: column;
+}
+
+.points-total {
+    text-align: center;
+    font-size: 78px;
+    line-height: 1;
+    font-weight: 700;
+    color: #2ecc71;
+    margin-top: 10px;
+}
+
+.points-label {
+    text-align: center;
+    color: #68758d;
+    font-size: 16px;
+    margin-top: 12px;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 20px;
+    background: #e9edf3;
+    border-radius: 999px;
+    overflow: hidden;
+    margin-top: 34px;
+}
+
+.progress-fill {
+    display: block;
+    width: 84%;
+    height: 100%;
+    background: linear-gradient(90deg, #2ecc71 0%, #3498db 100%);
+}
+
+.progress-text {
+    text-align: center;
+    margin-top: 16px;
+    color: #6d7890;
+    font-size: 15px;
+}
+
+.medals-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.medal-item {
+    border-radius: 14px;
+    min-height: 110px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 16px;
+}
+
+.medal-item.unlocked {
+    background: #35c96d;
+    color: #ffffff;
+}
+
+.medal-item.locked {
+    background: #e2e6ec;
+    color: #7c8aa0;
+}
+
+.medal-icon {
+    font-size: 34px;
+    line-height: 1;
+    margin-bottom: 12px;
+}
+
+.medal-item p {
+    font-size: 14px;
+}
+
+.ranking-list {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+}
+
+.ranking-item {
+    display: grid;
+    grid-template-columns: 42px 1fr auto;
+    align-items: center;
+    gap: 14px;
+}
+
+.ranking-position {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    color: #ffffff;
+    font-size: 22px;
+}
+
+.ranking-position.gold {
+    background: #f39c12;
+}
+
+.ranking-position.silver {
+    background: #9ea7b8;
+}
+
+.ranking-position.bronze {
+    background: #d4832f;
+}
+
+.ranking-position.neutral {
+    background: #d2d7df;
+}
+
+.ranking-name {
+    color: #1f3c5a;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.ranking-score {
+    color: #00c85c;
+    font-size: 18px;
+    font-weight: 500;
+}
+
+@media (max-width: 1100px) {
+    .gamification-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .reward-card {
+        min-height: auto;
+    }
+}
+
+@media (max-width: 640px) {
+    .gamification {
+        padding: 56px 16px;
+    }
+
+    .reward-card {
+        padding: 24px;
+    }
+
+    .points-total {
+        font-size: 58px;
+    }
+
+    .medals-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .ranking-item {
+        grid-template-columns: 42px 1fr;
+    }
+
+    .ranking-score {
+        grid-column: 2;
+        justify-self: end;
+    }
 }
 
 /* ====== FOOTER ====== */
@@ -331,6 +729,7 @@ footer {
     background: #2C3E50;
     color: white;
     padding: 40px 20px 20px;
+    scroll-margin-top: 100px;
 }
 
 .footer-container {

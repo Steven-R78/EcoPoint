@@ -33,6 +33,11 @@
 
     <!-- ====== CONTENIDO PRINCIPAL ====== -->
     <main>
+        <nav class="breadcrumbs" aria-label="Migas de pan">
+            <a href="#inicio" id="breadcrumb-home">Inicio</a>
+            <span class="breadcrumb-separator" aria-hidden="true">></span>
+            <span id="breadcrumb-current" aria-current="page">EcoPoint</span>
+        </nav>
 
         <!-- ====== HERO ====== -->
         <section class="hero" id="inicio">
@@ -277,6 +282,18 @@
   const guideModalTitle = document.getElementById('guide-modal-title');
   const guideModalText = document.getElementById('guide-modal-text');
   const guideModalClosers = document.querySelectorAll('[data-close-modal]');
+  const breadcrumbCurrent = document.getElementById('breadcrumb-current');
+  const breadcrumbMap = {
+    '#inicio': 'EcoPoint',
+    '#mapa': 'Mapa',
+    '#guia': 'Guía de Reciclaje',
+    '#comunidad': 'Comunidad',
+    '#contacto': 'Mi Perfil'
+  };
+
+  const updateBreadcrumb = (hash) => {
+    breadcrumbCurrent.textContent = breadcrumbMap[hash] || 'EcoPoint';
+  };
 
   filterLinks.forEach(link => {
     link.addEventListener('click', (e) => {
@@ -284,6 +301,12 @@
 
       filterLinks.forEach(l => l.classList.remove('active'));
       link.classList.add('active');
+    });
+  });
+
+  document.querySelectorAll('header nav a, .logo-link, .auth-btn, footer a, .hero-buttons a').forEach(link => {
+    link.addEventListener('click', () => {
+      updateBreadcrumb(link.getAttribute('href'));
     });
   });
 
@@ -320,5 +343,11 @@
       closeGuideModal();
     }
   });
+
+  window.addEventListener('hashchange', () => {
+    updateBreadcrumb(window.location.hash);
+  });
+
+  updateBreadcrumb(window.location.hash || '#inicio');
 </script>
 </html>

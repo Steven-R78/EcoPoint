@@ -4,13 +4,20 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: Arial, sans-serif;
+}
+
+body,
+input,
+textarea,
+button {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 /* ====== BODY ====== */
 /* Configuración general */
 body {
     background: #fcfcfc;
+    color: #1f2937;
 }
 
 main {
@@ -93,6 +100,7 @@ nav {
 }
 
 nav a {
+    position: relative;
     margin: 0 10px;
     text-decoration: none;
     color: #fff;
@@ -154,6 +162,21 @@ nav a:hover::after {
     border-radius: 5px;
     cursor: pointer;
     text-decoration: none;
+    transition: transform 0.2s ease, background 0.3s ease;
+}
+
+.auth-btn:hover,
+.auth-btn:focus-visible {
+    background: #d68910;
+    transform: translateY(-1px);
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+    outline: 3px solid #0f766e;
+    outline-offset: 3px;
 }
 
 /* ====== HERO ====== */
@@ -727,6 +750,193 @@ nav a:hover::after {
     font-weight: 500;
 }
 
+/* ====== IMPACTO / ODS ====== */
+.impact-section {
+    padding: 70px 24px;
+    background: linear-gradient(180deg, #ffffff 0%, #eefbf3 100%);
+    scroll-margin-top: 140px;
+}
+
+.impact-heading {
+    max-width: 860px;
+    margin: 0 auto 40px;
+    text-align: center;
+}
+
+.impact-tag,
+.form-tag {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: rgba(46, 204, 113, 0.14);
+    color: #1f7a45;
+    font-weight: 700;
+    font-size: 14px;
+    margin-bottom: 18px;
+}
+
+.impact-heading h2,
+.form-copy h2 {
+    font-size: 34px;
+    color: #0f172a;
+    margin-bottom: 16px;
+}
+
+.impact-heading p,
+.form-copy p {
+    font-size: 17px;
+    line-height: 1.7;
+    color: #4b5563;
+}
+
+.impact-grid {
+    max-width: 1180px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(240px, 1fr));
+    gap: 24px;
+}
+
+.impact-card {
+    background: #ffffff;
+    border: 1px solid #d8f3df;
+    border-radius: 18px;
+    padding: 28px;
+    box-shadow: 0 12px 24px rgba(15, 23, 42, 0.07);
+}
+
+.impact-card h3 {
+    color: #14532d;
+    margin-bottom: 14px;
+    font-size: 20px;
+}
+
+.impact-card p {
+    color: #4b5563;
+    line-height: 1.7;
+}
+
+/* ====== FORMULARIO ====== */
+.form-section {
+    padding: 70px 24px;
+    background: #f8fafc;
+    scroll-margin-top: 140px;
+}
+
+.form-wrapper {
+    max-width: 1180px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: minmax(280px, 1fr) minmax(320px, 520px);
+    gap: 34px;
+    align-items: start;
+}
+
+.form-copy {
+    padding: 10px 6px 10px 0;
+}
+
+.form-benefits {
+    list-style: none;
+    margin-top: 24px;
+    display: grid;
+    gap: 12px;
+}
+
+.form-benefits li {
+    background: #ffffff;
+    border-left: 4px solid #2ecc71;
+    padding: 14px 16px;
+    border-radius: 0 12px 12px 0;
+    color: #334155;
+    box-shadow: 0 10px 22px rgba(15, 23, 42, 0.05);
+}
+
+.eco-form {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 16px 30px rgba(15, 23, 42, 0.12);
+    border: 1px solid #e5e7eb;
+}
+
+.form-group {
+    margin-bottom: 18px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    border: 1px solid #cbd5e1;
+    border-radius: 12px;
+    padding: 14px 16px;
+    font-size: 15px;
+    color: #0f172a;
+    background: #ffffff;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    border-color: #2ecc71;
+    box-shadow: 0 0 0 4px rgba(46, 204, 113, 0.15);
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.form-group [aria-invalid="true"] {
+    border-color: #dc2626;
+    box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.12);
+}
+
+.error-message {
+    display: block;
+    min-height: 20px;
+    margin-top: 6px;
+    color: #b91c1c;
+    font-size: 13px;
+}
+
+.btn-submit {
+    width: 100%;
+    justify-content: center;
+    border: none;
+    background: linear-gradient(135deg, #2ecc71 0%, #1f9d55 100%);
+    color: #ffffff;
+    cursor: pointer;
+}
+
+.btn-submit:hover,
+.btn-submit:focus-visible {
+    background: linear-gradient(135deg, #28b765 0%, #1a8448 100%);
+}
+
+.form-status {
+    min-height: 24px;
+    margin-top: 16px;
+    font-weight: 700;
+}
+
+.form-status.is-success {
+    color: #166534;
+}
+
+.form-status.is-error {
+    color: #b91c1c;
+}
+
 @media (max-width: 1100px) {
     .gamification-grid {
         grid-template-columns: 1fr;
@@ -735,9 +945,30 @@ nav a:hover::after {
     .reward-card {
         min-height: auto;
     }
+
+    .impact-grid,
+    .form-wrapper {
+        grid-template-columns: 1fr;
+    }
 }
 
 @media (max-width: 640px) {
+    header {
+        padding: 14px 16px;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    nav {
+        width: 100%;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    main {
+        padding-top: 158px;
+    }
+
     .gamification {
         padding: 56px 16px;
     }
@@ -761,6 +992,25 @@ nav a:hover::after {
     .ranking-score {
         grid-column: 2;
         justify-self: end;
+    }
+
+    .impact-section,
+    .form-section {
+        padding: 56px 16px;
+    }
+
+    .impact-heading h2,
+    .form-copy h2 {
+        font-size: 28px;
+    }
+
+    .impact-heading p,
+    .form-copy p {
+        font-size: 15px;
+    }
+
+    .eco-form {
+        padding: 22px;
     }
 }
 

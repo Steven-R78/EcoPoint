@@ -122,27 +122,6 @@ nav a:hover::after {
     transition: color 0.3s ease;
 }
 
-nav a > ::after {
-    content: '';
-    position: absolute;
-    width: 0;
-    height: 2px;
-    bottom: 0;
-    left: 50%;
-    background-color: #2C3E50;
-    transition: all 0.3s ease-in-out;
-    transform: translateX(-50%);
-}
-
-nav a:hover {
-    color: #2C3E50;
-    padding-left: 5px;
-}
-
-nav a:hover::after {
-    width: 100%;
-}
-
 /* ====== BOTÓN LOGIN ====== */
 /* Botón principal */
 .auth-btn {

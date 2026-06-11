@@ -25,10 +25,11 @@
             <a href="#mapa">Mapa</a>
             <a href="#guia">Guía</a>
             <a href="#comunidad">Comunidad</a>
-            <a href="#contacto">Mi Perfil</a>
+            <a href="#impacto">ODS</a>
+            <a href="#registro">Mi Perfil</a>
         </nav>
 
-        <a href="#contacto" class="auth-btn">Login / Registro</a>
+        <a href="#registro" class="auth-btn">Login / Registro</a>
     </header>
 
     <!-- ====== CONTENIDO PRINCIPAL ====== -->
@@ -249,6 +250,81 @@
             </div>
         </section>
 
+        <section class="impact-section" id="impacto">
+            <div class="impact-heading">
+                <span class="impact-tag">ODS 12 + ODS 11</span>
+                <h2>Impacto social y ambiental de EcoPoint</h2>
+                <p>EcoPoint conecta ciudadanía, recicladores y puntos de acopio para mejorar la separación en la fuente, reducir residuos y fortalecer comunidades más sostenibles.</p>
+            </div>
+
+            <div class="impact-grid">
+                <article class="impact-card">
+                    <h3>Problema que resolvemos</h3>
+                    <p>Muchas personas quieren reciclar, pero no saben dónde llevar sus residuos ni cómo clasificarlos correctamente. Eso genera contaminación y desaprovechamiento de materiales valiosos.</p>
+                </article>
+
+                <article class="impact-card">
+                    <h3>Solución innovadora</h3>
+                    <p>La plataforma integra mapa, guía educativa y recompensas en una sola experiencia tipo SPA para motivar hábitos sostenibles y facilitar decisiones rápidas desde cualquier dispositivo.</p>
+                </article>
+
+                <article class="impact-card">
+                    <h3>Aporte a los ODS</h3>
+                    <p>Contribuye al <strong>ODS 12</strong> al promover producción y consumo responsables, y al <strong>ODS 11</strong> al apoyar ciudades más limpias, participativas y resilientes.</p>
+                </article>
+            </div>
+        </section>
+
+        <section class="form-section" id="registro">
+            <div class="form-wrapper">
+                <div class="form-copy">
+                    <span class="form-tag">Participa</span>
+                    <h2>Regístrate para unirte a la red EcoPoint</h2>
+                    <p>Déjanos tus datos para recibir rutas de reciclaje, retos sostenibles y recomendaciones según tu zona. El formulario valida la información para mejorar la calidad del registro.</p>
+                    <ul class="form-benefits">
+                        <li>Ubica puntos de reciclaje cercanos</li>
+                        <li>Recibe retos y recompensas ecológicas</li>
+                        <li>Fortalece hábitos alineados con los ODS</li>
+                    </ul>
+                </div>
+
+                <form class="eco-form" id="eco-form" novalidate>
+                    <div class="form-group">
+                        <label for="nombre">Nombre completo</label>
+                        <input type="text" id="nombre" name="nombre" placeholder="Ej. Laura Martínez" required pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñ ]{3,60}$" aria-describedby="error-nombre">
+                        <small class="error-message" id="error-nombre"></small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="correo">Correo electrónico</label>
+                        <input type="email" id="correo" name="correo" placeholder="ejemplo@correo.com" required pattern="^[^\\s@]+@[^\\s@]+\\.[^\\s@]{2,}$" aria-describedby="error-correo">
+                        <small class="error-message" id="error-correo"></small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="telefono">Teléfono</label>
+                        <input type="tel" id="telefono" name="telefono" placeholder="3001234567" required pattern="^\\d{10}$" aria-describedby="error-telefono">
+                        <small class="error-message" id="error-telefono"></small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ciudad">Ciudad</label>
+                        <input type="text" id="ciudad" name="ciudad" placeholder="Bogotá" required pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñ ]{3,40}$" aria-describedby="error-ciudad">
+                        <small class="error-message" id="error-ciudad"></small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="mensaje">¿Qué residuo reciclas con más frecuencia?</label>
+                        <textarea id="mensaje" name="mensaje" rows="4" placeholder="Cuéntanos brevemente..." required aria-describedby="error-mensaje"></textarea>
+                        <small class="error-message" id="error-mensaje"></small>
+                    </div>
+
+                    <button type="submit" class="btn btn-submit">Crear perfil ecológico</button>
+                    <p class="form-status" id="form-status" aria-live="polite"></p>
+                </form>
+            </div>
+        </section>
+
     </main>
 
     <!-- ====== FOOTER ====== -->
@@ -263,8 +339,19 @@
                     <h4>Navegación</h4>
                     <ul>
                         <li><a href="#inicio">Sobre nosotros</a></li>
-                        <li><a href="#contacto">Contacto</a></li>
                         <li><a href="#mapa">Mapa de Puntos</a></li>
+                        <li><a href="#impacto">ODS e impacto</a></li>
+                        <li><a href="#registro">Registro</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Mini mapa del sitio</h4>
+                    <ul>
+                        <li><a href="#inicio">Inicio</a></li>
+                        <li><a href="#guia">Guía de reciclaje</a></li>
+                        <li><a href="#comunidad">Sistema de recompensas</a></li>
+                        <li><a href="#contacto">Footer y contacto</a></li>
                     </ul>
                 </div>
             </div>
@@ -283,12 +370,16 @@
   const guideModalText = document.getElementById('guide-modal-text');
   const guideModalClosers = document.querySelectorAll('[data-close-modal]');
   const breadcrumbCurrent = document.getElementById('breadcrumb-current');
+  const ecoForm = document.getElementById('eco-form');
+  const formStatus = document.getElementById('form-status');
   const breadcrumbMap = {
     '#inicio': 'EcoPoint',
     '#mapa': 'Mapa',
     '#guia': 'Guía de Reciclaje',
     '#comunidad': 'Comunidad',
-    '#contacto': 'Mi Perfil'
+    '#impacto': 'ODS',
+    '#registro': 'Registro',
+    '#contacto': 'Contacto'
   };
 
   const updateBreadcrumb = (hash) => {
@@ -347,6 +438,75 @@
   window.addEventListener('hashchange', () => {
     updateBreadcrumb(window.location.hash);
   });
+
+  const validationRules = {
+    nombre: {
+      regex: /^[A-Za-zÁÉÍÓÚáéíóúÑñ ]{3,60}$/,
+      message: 'Ingresa un nombre válido de 3 a 60 letras.'
+    },
+    correo: {
+      regex: /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/,
+      message: 'Escribe un correo electrónico válido.'
+    },
+    telefono: {
+      regex: /^\d{10}$/,
+      message: 'El teléfono debe tener exactamente 10 dígitos.'
+    },
+    ciudad: {
+      regex: /^[A-Za-zÁÉÍÓÚáéíóúÑñ ]{3,40}$/,
+      message: 'Ingresa una ciudad válida.'
+    },
+    mensaje: {
+      regex: /^.{10,250}$/,
+      message: 'Escribe entre 10 y 250 caracteres.'
+    }
+  };
+
+  const validateField = (field) => {
+    const rule = validationRules[field.name];
+    const errorElement = document.getElementById(`error-${field.name}`);
+    const value = field.value.trim();
+
+    if (!rule || !errorElement) {
+      return true;
+    }
+
+    if (!rule.regex.test(value)) {
+      field.setAttribute('aria-invalid', 'true');
+      errorElement.textContent = rule.message;
+      return false;
+    }
+
+    field.removeAttribute('aria-invalid');
+    errorElement.textContent = '';
+    return true;
+  };
+
+  if (ecoForm) {
+    ecoForm.querySelectorAll('input, textarea').forEach((field) => {
+      field.addEventListener('input', () => validateField(field));
+      field.addEventListener('blur', () => validateField(field));
+    });
+
+    ecoForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+
+      const fields = ecoForm.querySelectorAll('input, textarea');
+      const isValid = [...fields].every((field) => validateField(field));
+
+      if (!isValid) {
+        formStatus.textContent = 'Revisa los campos marcados antes de enviar el formulario.';
+        formStatus.classList.add('is-error');
+        formStatus.classList.remove('is-success');
+        return;
+      }
+
+      formStatus.textContent = 'Registro enviado con éxito. Bienvenido a EcoPoint.';
+      formStatus.classList.add('is-success');
+      formStatus.classList.remove('is-error');
+      ecoForm.reset();
+    });
+  }
 
   updateBreadcrumb(window.location.hash || '#inicio');
 </script>

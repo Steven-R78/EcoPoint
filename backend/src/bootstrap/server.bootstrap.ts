@@ -1,5 +1,6 @@
 import express from 'express';
 import http from 'http';
+import envs from '../config/environment-vars';
 
 export class ServerBootstrap {
     private app: express.Application;
@@ -8,12 +9,20 @@ export class ServerBootstrap {
         this.app = app;
     }
 
-    initialize() {
-        const server = http.createServer(this.app);
-        const PORT = Number(process.env.PORT ?? 4000);
+    initialize(): Promise<boolean> {
+        return new Promise((resolve, reject) => {
+            const server = http.createServer(this.app);
+            const PORT = Number(envs.PORT ?? 4000);
 
-        server.listen(PORT, () => {
-            console.log(`Server started on http://localhost:${PORT}`);
+            server.listen(PORT)
+            .on('listening', () => {
+                console.log(`Server is running on http://localhost:${PORT}`);
+                resolve(true);
+            })
+            .on('error', (err) => {
+                console.error('Error starting server:', err);
+                reject(err);
+            });
         });
     }
 }

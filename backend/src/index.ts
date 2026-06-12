@@ -1,5 +1,6 @@
-import app from './app';
-import { ServerBootstrap } from './bootstrap/server.bootstrap';
+import app from './infraestructure/web/app'
+import { ServerBootstrap } from './infraestructure/bootstrap/server.bootstrap';
+import { connectToDatabase } from './infraestructure/config/data-base';
 
 const serverBootstrap = new ServerBootstrap(app);
 
@@ -8,10 +9,14 @@ const serverBootstrap = new ServerBootstrap(app);
  */
 async function startServer() {
     try {
-        const instances = [serverBootstrap.initialize()];
+        const instances = [
+            connectToDatabase(), // Conexión a la base de datos
+            serverBootstrap.initialize() // Inicialización del servidor
+        ];
         await Promise.all(instances);
     } catch (error) {
-        console.error(error);
+        console.error("Error starting server:", error);
+        process.exit(1);
     }
 }
 

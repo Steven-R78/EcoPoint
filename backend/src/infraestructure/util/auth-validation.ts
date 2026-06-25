@@ -5,7 +5,12 @@ export type LoginData = {
     password: string;
 };
 
-function validateLoginData(data: unknown): { error?: joi.ValidationError; value: LoginData } {
+type ValidateLoginData = {
+    error: joi.ValidationError | undefined;
+    value: LoginData;
+};
+
+function validateLoginData(data: unknown): ValidateLoginData {
     const schema = joi.object({
         email: joi.string().email({ tlds: { allow: false } }).required()
             .messages({ 'string.email': 'Correo electronico no valido' }),

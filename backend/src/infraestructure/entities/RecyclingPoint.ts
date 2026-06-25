@@ -6,7 +6,7 @@ export class RecyclingPoint {
     id_point!: number;
 
     @Column({ type: 'integer', nullable: true })
-    material_id!: number;
+    material_id!: number | null;
 
     @Column({ type: 'varchar', length: 255 })
     name_point!: string;

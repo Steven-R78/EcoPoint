@@ -3,6 +3,7 @@ import cors from 'cors';
 import userRoutes from '../routes/UserRoutes';
 import authRoutes from '../routes/AuthRoutes';
 import recyclingPointRoutes from '../routes/RecyclingPointRoutes';
+import materialRoutes from '../routes/MaterialRoutes';
 
 class App{
     private app: express.Application;
@@ -22,6 +23,7 @@ class App{
         this.app.use("/api/auth", authRoutes);
         this.app.use("/api", userRoutes);
         this.app.use("/api", recyclingPointRoutes);
+        this.app.use("/api", materialRoutes);
     }
 
     getApp(){

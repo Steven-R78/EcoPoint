@@ -5,6 +5,7 @@ import authRoutes from '../routes/AuthRoutes';
 import recyclingPointRoutes from '../routes/RecyclingPointRoutes';
 import materialRoutes from '../routes/MaterialRoutes';
 import medalRoutes from '../routes/MedalRoutes';
+import recyclingRecordRoutes from '../routes/RecyclingRecordRoutes';
 
 class App{
     private app: express.Application;
@@ -26,6 +27,7 @@ class App{
         this.app.use("/api", recyclingPointRoutes);
         this.app.use("/api", materialRoutes);
         this.app.use("/api", medalRoutes);
+        this.app.use("/api", recyclingRecordRoutes);
     }
 
     getApp(){

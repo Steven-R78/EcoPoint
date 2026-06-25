@@ -12,26 +12,26 @@ export class UserController {
         this.app = app;
     }
 
+    private withoutPassword(user: User) {
+        const { password: _, ...safeUser } = user;
+        return safeUser;
+    }
+
     async createUser(req: Request, res: Response): Promise<Response> {
         try {
             // Validar datos de entrada
-            const {name,email,password,status} = loadUserData(req.body)
+            const {name, email, password, status, roleId} = loadUserData(req.body)
 
-            // Crear user
-            const user: Omit<User, "id"> = {name, email, password, status};
+            const user: Omit<User, "id"> = {name, email, password, status, roleId};
             const userId = await this.app.createUser(user);
             
             return res
                 .status(201)
-                .json({messge: "Usiario creado con exito", userId});
+                .json({ message: "Usuario creado con exito", userId });
         } catch (error) {
             if (error instanceof Error) {
-                return res
-                    .status(500)
-                    .json({
-                        error: "Error interno del servidor",
-                        details: error.message
-                    })
+                const status = error.message.includes('email') ? 409 : 500;
+                return res.status(status).json({ error: error.message });
             }
             return res.status(500).json({ error: "Error interno del servidor"})
         }
@@ -71,7 +71,7 @@ export class UserController {
             const user = await this.app.getUserById(id)
             if (!user) return res.status(404).json({ error: "Usuario no encontrado" })
             
-            return res.status(200).json(user);
+            return res.status(200).json(this.withoutPassword(user));
         } catch(error) {
             if (error instanceof Error) {
                 return res.status(500).json({ error: "Error interno del servidor", details: error.message})
@@ -90,7 +90,7 @@ export class UserController {
                 return res.status(404).json({ message: "Usuario no encontrado" })
             }
 
-            return res.status(200).json(user);
+            return res.status(200).json(this.withoutPassword(user));
         } catch (error) {
             if (error instanceof Error) {
                 return res.status(400).json({ error: error.message})
@@ -105,7 +105,7 @@ export class UserController {
     async getAllUsers(req: Request, res: Response): Promise<Response> {
         try {
             const users = await this.app.getAllUsers()
-            return res.status(200).json(users)
+            return res.status(200).json(users.map((user) => this.withoutPassword(user)));
         } catch (error) {
             return res.status(500).json({ message: "Error al obtener usuarios", error })
         }

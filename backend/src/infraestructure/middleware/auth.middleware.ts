@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import envs from '../config/environment-vars';
 
 export type AuthRequest = Request & {
-    user?: { userId: number; email: string };
+    user?: { userId: number; email: string; roleId?: number };
 };
 
 export const authMiddleware = (req: AuthRequest, res: Response, next: NextFunction) => {
@@ -13,8 +13,16 @@ export const authMiddleware = (req: AuthRequest, res: Response, next: NextFuncti
     }
 
     const token = header.split(' ')[1];
+    if (!token) {
+        return res.status(401).json({ error: 'Token no proporcionado' });
+    }
+
     try {
-        const payload = jwt.verify(token, envs.JWT_SECRET) as { userId: number; email: string };
+        const payload = jwt.verify(token, envs.JWT_SECRET) as {
+            userId: number;
+            email: string;
+            roleId?: number;
+        };
         req.user = payload;
         next();
     } catch {

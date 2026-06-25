@@ -43,4 +43,20 @@ router.get("/users/id/:id", async (req,res) => {
     }
 })
 
+router.put("/users/:id", async (req, res) => {
+    try {
+        await userController.updateUser(req, res);
+    } catch (error) {
+        res.status(500).json({ message: "Error actualizando usuario", error });
+    }
+});
+
+router.delete("/users/:id", async (req, res) => {
+    try {
+        await userController.deleteUser(req, res);
+    } catch (error) {
+        res.status(500).json({ message: "Error eliminando usuario", error });
+    }
+});
+
 export default router;

@@ -5,6 +5,7 @@ export type ReturnUpdateUserData = Partial<{
     email: string;
     password: string;
     status: number;
+    roleId: number;
 }>;
 
 type ValidateUpdateUserData = {
@@ -40,10 +41,16 @@ function validateUpdateUserData(data: any): ValidateUpdateUserData {
             .messages({
                 "number.base": "El estado debe ser numerico",
                 "any.only": "El estado debe ser 0 o 1",
+            }),
+        roleId: joi.number()
+            .valid(1, 2)
+            .messages({
+                "number.base": "El rol debe ser numerico",
+                "any.only": "El rol debe ser 1 (admin) o 2 (reciclador)",
             })
     })
     .unknown(false)
-    .or("name","email","password", "status");
+    .or("name","email","password", "status", "roleId");
 
     const {error, value} = schema.validate(data,{
         abortEarly:false,

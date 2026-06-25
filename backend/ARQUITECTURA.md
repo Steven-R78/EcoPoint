@@ -1,34 +1,49 @@
 # Arquitectura del Backend — EcoPoint
 
-Este documento describe cómo está organizado el backend de EcoPoint, qué hace cada capa y cómo fluyen las peticiones actualmente.
+Este documento describe cómo está organizado el backend de EcoPoint, qué hace cada capa, cómo fluyen las peticiones y qué módulos están implementados.
 
 ---
 
-## Patrón: Arquitectura Hexagonal (Puertos y Adaptadores)
+## Patrón de desarrollo: Arquitectura Hexagonal
 
 La aplicación separa **lógica de negocio** de **detalles técnicos** (base de datos, HTTP, frameworks). La comunicación entre capas ocurre mediante **contratos (puertos)** que los **adaptadores** implementan.
 
 ```
                     ┌─────────────────────────────────────┐
                     │           HTTP (Express)            │
-                    │   routes → controller → util (Joi)  │
+                    │  routes → controller → util (Joi)   │
                     └──────────────────┬──────────────────┘
                                        │
                     ┌──────────────────▼──────────────────┐
                     │         APPLICATION LAYER           │
-                    │      UserApplication (negocio)      │
+                    │   *Application (reglas de negocio)    │
                     └──────────────────┬──────────────────┘
                                        │ usa
                     ┌──────────────────▼──────────────────┐
                     │           DOMAIN LAYER              │
-                    │   User (interface) + UserPort       │
+                    │   Interface + *Port (contrato)      │
                     └──────────────────┬──────────────────┘
                                        │ implementa
                     ┌──────────────────▼──────────────────┐
                     │       INFRASTRUCTURE LAYER          │
-                    │   UserAdapter → TypeORM → Postgres  │
+                    │   *Adapter → TypeORM → PostgreSQL   │
                     └─────────────────────────────────────┘
 ```
+
+---
+
+## Patrón de diseño: Adapter
+
+Cada módulo tiene un **adaptador** que implementa su puerto y traduce entre el **dominio** y la **entidad TypeORM**.
+
+Ejemplo en `UserAdapter`:
+
+| Método privado | Función |
+|----------------|---------|
+| `toDomain(entity)` | Columnas `*_user` → propiedades del dominio (`name`, `email`, …) |
+| `toEntity(domain)` | Dominio → entidad TypeORM para `save()` |
+
+Los adaptadores son el único lugar que toca TypeORM directamente. Esto permite cambiar la BD sin modificar la lógica de negocio.
 
 ---
 
@@ -36,36 +51,53 @@ La aplicación separa **lógica de negocio** de **detalles técnicos** (base de 
 
 ```
 src/
-├── index.ts                          # Arranque: BD + servidor (Promise.all)
+├── index.ts
 │
-├── domain/                           # DOMINIO — qué es el negocio
-│   ├── User.ts                       # Interface User (modelo de dominio)
-│   └── UserPort.ts                   # Contrato: operaciones sobre usuarios
+├── domain/                           # DOMINIO
+│   ├── User.ts, Material.ts, …       # Interfaces del negocio
+│   └── port/
+│       ├── UserPort.ts
+│       ├── MaterialPort.ts
+│       ├── RecyclingPointPort.ts
+│       ├── MedalPort.ts
+│       ├── RecyclingRecordPort.ts
+│       └── RolePort.ts
 │
-├── application/                        # APLICACIÓN — reglas de negocio
-│   └── UserApplication.ts            # Valida reglas antes de persistir
+├── application/                      # APLICACIÓN
+│   ├── UserApplication.ts
+│   ├── MaterialApplication.ts
+│   ├── RecyclingPointApplication.ts
+│   ├── MedalApplication.ts
+│   ├── RecyclingRecordApplication.ts
+│   └── RoleApplication.ts
 │
-└── infraestructure/                  # INFRAESTRUCTURA — detalles técnicos
-    ├── adapter/
-    │   └── UserAdapter.ts            # Implementa UserPort con TypeORM
-    ├── bootstrap/
-    │   └── server.bootstrap.ts       # Levanta HTTP en el puerto configurado
-    ├── config/
-    │   ├── environment-vars.ts       # Carga y valida .env con Joi
-    │   └── data-base.ts              # DataSource TypeORM + connectToDatabase()
-    ├── controller/
-    │   └── UserController.ts         # Recibe req/res, valida y delega
-    ├── entities/
-    │   └── User.ts                   # Entidad TypeORM (tabla en PostgreSQL)
-    ├── routes/
-    │   └── UserRoutes.ts             # Endpoints REST y cableado de capas
-    ├── util/
-    │   ├── user-validation.ts        # Joi: crear usuario
-    │   ├── user-update-validation.ts # Joi: actualizar usuario (partial)
-    │   └── email-validation.ts       # Joi: validar email en consultas
-    └── web/
-        └── app.ts                    # Express: middlewares + montaje de rutas
+└── infraestructure/                  # INFRAESTRUCTURA
+    ├── adapter/                      # Implementan los puertos
+    ├── bootstrap/                    # server.bootstrap.ts
+    ├── config/                       # environment-vars.ts, data-base.ts
+    ├── controller/                   # Un controller por módulo
+    ├── entities/                     # Entidades TypeORM
+    ├── middleware/                   # auth.middleware.ts (JWT)
+    ├── routes/                       # Rutas REST + cableado de capas
+    ├── util/                         # Validaciones Joi por módulo
+    └── web/                          # app.ts (Express + CORS)
 ```
+
+---
+
+## Módulos implementados
+
+| Módulo | Dominio | Application | Adapter | Rutas base |
+|--------|---------|-------------|---------|------------|
+| Usuarios | `User` | `UserApplication` | `UserAdapter` | `/api/users` |
+| Auth (JWT) | — | `UserApplication.login` | — | `/api/auth` |
+| Puntos de reciclaje | `RecyclingPoint` | `RecyclingPointApplication` | `RecyclingPointAdapter` | `/api/recycling-points` |
+| Materiales | `Material` | `MaterialApplication` | `MaterialAdapter` | `/api/materials` |
+| Medallas | `Medal` | `MedalApplication` | `MedalAdapter` | `/api/medals` |
+| Registros de reciclaje | `RecyclingRecord` | `RecyclingRecordApplication` | `RecyclingRecordAdapter` | `/api/recycling-records` |
+| Roles | `Role` | `RoleApplication` | `RoleAdapter` | `/api/roles` |
+
+Cada módulo CRUD expone: `POST`, `GET` (lista), `GET /id/:id`, `PUT /:id`, `DELETE /:id` con baja lógica.
 
 ---
 
@@ -73,39 +105,39 @@ src/
 
 ### 1. Domain (`domain/`)
 
-Define **qué es un usuario** y **qué operaciones** debe soportar el sistema, sin saber cómo se guardan ni cómo llegan las peticiones.
+Define **qué existe en el negocio** y **qué operaciones** debe soportar el sistema, sin saber cómo se persisten los datos ni cómo llegan las peticiones HTTP.
 
-| Archivo        | Rol |
-|----------------|-----|
-| `User.ts`      | Interface con `id`, `name`, `email`, `password`, `status` |
-| `UserPort.ts`  | Contrato: `createUser`, `updateUser`, `deleteUser`, `getUserById`, `getUserByEmail`, `getAllUsers` |
+- **Interfaces** (`User.ts`, `Material.ts`, …): modelos en camelCase.
+- **Puertos** (`domain/port/*Port.ts`): contratos que los adaptadores deben cumplir.
 
 ### 2. Application (`application/`)
 
-Contiene **reglas de negocio**:
+Contiene **reglas de negocio**. No conoce Express ni SQL; solo usa el puerto inyectado.
 
-| Regla | Dónde |
-|-------|-------|
-| No registrar email duplicado | `createUser` |
-| Usuario debe existir para actualizar | `updateUser` |
-| Email en uso por otro usuario al actualizar | `updateUser` |
-
-No conoce Express ni SQL. Solo usa `UserPort`.
+| Módulo | Reglas principales |
+|--------|-------------------|
+| `UserApplication` | Email único, hash bcrypt, login con credenciales |
+| `RecyclingPointApplication` | Validar que el `materialId` exista y esté activo |
+| `MaterialApplication` | Nombre de material único |
+| `MedalApplication` | Nombre de medalla único |
+| `RecyclingRecordApplication` | Usuario y punto activos, puntos > 0 |
+| `RoleApplication` | Nombre de rol único |
 
 ### 3. Infrastructure (`infraestructure/`)
 
-Implementa todo lo técnico:
+Implementa los detalles técnicos:
 
-| Módulo | Rol |
-|--------|-----|
-| **adapter** | `UserAdapter` traduce entre `User` (dominio) y `User` (entidad TypeORM) |
-| **entities** | Mapeo a tabla `user` en schema `users` de PostgreSQL |
-| **controller** | Valida entrada HTTP, llama a `UserApplication`, responde JSON |
-| **util** | Validaciones Joi del body (formato, longitud, regex) |
-| **routes** | Instancia adapter → application → controller y define endpoints |
-| **config** | Variables de entorno y conexión a PostgreSQL |
-| **bootstrap** | Inicialización del servidor con promesas |
-| **web** | App Express con `express.json()` y prefijo `/api` |
+| Carpeta | Rol |
+|---------|-----|
+| `adapter/` | Implementa puertos con TypeORM |
+| `entities/` | Mapeo a tablas PostgreSQL (schema `public`) |
+| `controller/` | Valida entrada HTTP, delega a Application, responde JSON |
+| `util/` | Validaciones Joi del body (formato, regex, rangos) |
+| `routes/` | Instancia adapter → application → controller |
+| `middleware/` | Verifica JWT en rutas protegidas |
+| `config/` | Variables de entorno y conexión a PostgreSQL |
+| `bootstrap/` | Servidor HTTP con promesas |
+| `web/` | Express con `cors()`, `express.json()` y montaje de rutas |
 
 ---
 
@@ -117,21 +149,24 @@ Archivo: `src/index.ts`
 sequenceDiagram
     participant Index as index.ts
     participant DB as connectToDatabase()
-    participant Server as ServerBootstrap.initialize()
+    participant Seed as seedInitialData()
+    participant Server as ServerBootstrap
 
     Index->>DB: Promise.all (paralelo)
     Index->>Server: Promise.all (paralelo)
     DB->>DB: AppDataSource.initialize()
-    DB-->>Index: "Database connection established"
+    DB->>Seed: roles, materiales, medallas
+    DB-->>Index: conexión OK
     Server->>Server: server.listen(PORT)
-    Server-->>Index: "Server is running on :4000"
+    Server-->>Index: servidor OK
 ```
 
-1. Carga variables de entorno (`environment-vars.ts` al importarse).
-2. Ejecuta en paralelo:
+1. Carga y valida variables de entorno (`environment-vars.ts`).
+2. En paralelo con `Promise.all`:
    - Conexión a PostgreSQL (`connectToDatabase`).
    - Servidor HTTP (`ServerBootstrap.initialize`).
-3. Si algo falla → `process.exit(1)`.
+3. Tras conectar, inserta datos iniciales si las tablas están vacías (roles, materiales, medallas).
+4. Si algo falla → `process.exit(1)`.
 
 ---
 
@@ -147,191 +182,152 @@ sequenceDiagram
     participant Adapter as UserAdapter
     participant DB as PostgreSQL
 
-    Cliente->>Routes: POST /api/users + body JSON
+    Cliente->>Routes: POST /api/users
     Routes->>Ctrl: createUser(req, res)
     Ctrl->>Joi: loadUserData(req.body)
-    Joi-->>Ctrl: { name, email, password, status }
+    Joi-->>Ctrl: datos validados
     Ctrl->>App: createUser(user)
     App->>Adapter: getUserByEmail(email)
     Adapter->>DB: SELECT
-    DB-->>Adapter: null (no existe)
-    App->>Adapter: createUser(user)
-    Adapter->>DB: INSERT (save)
-    DB-->>Adapter: id_user generado
-    Adapter-->>App: userId
-    App-->>Ctrl: userId
-    Ctrl-->>Cliente: 201 { userId, message }
+    App->>App: bcrypt.hash(password)
+    App->>Adapter: createUser(hashed)
+    Adapter->>DB: INSERT
+    Ctrl-->>Cliente: 201 { userId }
 ```
 
-### Capas de validación al crear
+### Capas de validación al crear usuario
 
 | Orden | Capa | Qué valida |
 |-------|------|------------|
-| 1 | `user-validation.ts` (Joi) | Nombre (mín. 3, solo letras), email válido, password (mín. 6, letra+número), status 0 o 1 |
-| 2 | `UserApplication` | Email no registrado previamente |
-| 3 | `UserAdapter` | Persistencia en BD (unique constraint en email) |
+| 1 | `user-validation.ts` | Nombre, email, password (regex), status, roleId |
+| 2 | `UserApplication` | Email no registrado |
+| 3 | `UserApplication` | Hash bcrypt antes de guardar |
 
 ---
 
-## Flujo: listar usuarios (GET /api/users)
+## Flujo: login (POST /api/auth/login)
 
 ```mermaid
 sequenceDiagram
     participant Cliente
-    participant Routes as UserRoutes
-    participant Ctrl as UserController
+    participant Auth as AuthController
     participant App as UserApplication
-    participant Adapter as UserAdapter
+    participant JWT as jsonwebtoken
+
+    Cliente->>Auth: POST /api/auth/login
+    Auth->>App: login(email, password)
+    App->>App: bcrypt.compare()
+    Auth->>JWT: sign({ userId, email, roleId })
+    Auth-->>Cliente: 200 { token, user }
+```
+
+El endpoint `GET /api/auth/me` usa `authMiddleware` para verificar el token y devolver el perfil sin contraseña.
+
+---
+
+## Flujo: registrar reciclaje (POST /api/recycling-records)
+
+```mermaid
+sequenceDiagram
+    participant Cliente
+    participant App as RecyclingRecordApplication
+    participant Adapter as RecyclingRecordAdapter
     participant DB as PostgreSQL
 
-    Cliente->>Routes: GET /api/users
-    Routes->>Ctrl: getAllUsers(req, res)
-    Ctrl->>App: getAllUsers()
-    App->>Adapter: getAllUsers()
-    Adapter->>DB: SELECT WHERE status_user = 1
-    DB-->>Adapter: filas activas
-    Adapter-->>App: User[]
-    App-->>Ctrl: User[]
-    Ctrl-->>Cliente: 200 JSON array
+    Cliente->>App: createRecord({ userId, pointId, pointsEarned })
+    App->>Adapter: userExistsActive(userId)
+    App->>Adapter: pointExistsActive(pointId)
+    App->>Adapter: createRecord()
+    Adapter->>DB: INSERT recycling_records
+    Adapter->>Adapter: getUserTotalPoints()
+    Adapter->>Adapter: awardMedals() si alcanza umbral
+    Adapter-->>Cliente: { recordId, totalPoints, newMedals }
 ```
 
-Solo devuelve usuarios con `status_user = 1` (activos). Los dados de baja (`status = 0`) no aparecen.
+Esta es la **lógica de negocio principal** de gamificación: al reciclar se suman puntos y se otorgan medallas en `user_medals` si el total alcanza `points_required`.
 
 ---
 
-## Flujo: buscar por ID (GET /api/users/id/:id)
+## Baja lógica (DELETE)
 
-1. `UserController` convierte `req.params.id` a número.
-2. Si no es número válido → **400** `ID invalido`.
-3. `UserApplication.getUserById(id)` → `UserAdapter` → `findOne`.
-4. Si no existe → **404**.
-5. Si existe → **200** con el objeto usuario.
+Ningún módulo borra filas físicamente. El adaptador cambia el campo `status` a `0`:
 
----
+| Módulo | Campo |
+|--------|-------|
+| Users | `status_user` |
+| Recycling points | `status_point` |
+| Materials | `status_material` |
+| Medals | `status_medal` |
+| Recycling records | `status_record` |
+| Roles | `status_role` |
 
-## Flujo: buscar por email (GET /api/users/email/:email)
-
-1. `email-validation.ts` valida el parámetro email.
-2. `UserApplication.getUserByEmail(email)` → consulta en BD.
-3. Si no existe → **404**.
-4. Si existe → **200** con el objeto usuario.
+Los `GET` de listado solo devuelven registros con `status = 1`.
 
 ---
 
-## Flujo: actualizar usuario (implementado, sin ruta HTTP aún)
+## Modelo de datos (PostgreSQL)
 
-Existe en `UserController.updateUser` y `UserApplication.updateUser`, pero **no está registrado en `UserRoutes.ts`**.
+Schema: `public`. Script completo: `database/schema.sql`.
 
-```
-PUT /api/users/:id  →  (pendiente de registrar)
-
-1. Validar ID numérico
-2. loadUpdateUserData(req.body) — Joi partial, mínimo 1 campo
-3. UserApplication.updateUser(id, data)
-   - Verifica que el usuario exista
-   - Si cambia email, verifica que no esté en uso por otro
-4. UserAdapter.updateUser — Object.assign + save
-5. Respuesta 200 o 404
-```
-
----
-
-## Flujo: eliminar usuario — baja lógica (implementado, sin ruta HTTP aún)
-
-Existe en `UserController.deleteUser`, pero **no está registrado en `UserRoutes.ts`**.
-
-```
-DELETE /api/users/:id  →  (pendiente de registrar)
-
-1. Validar ID
-2. UserAdapter.deleteUser(id)
-3. NO hace DELETE en SQL
-4. Cambia status_user a 0
-5. El usuario deja de aparecer en getAllUsers
-```
-
----
-
-## Modelo de datos
-
-### Dominio (`domain/User.ts`)
-
-```typescript
-interface User {
-    id: number;
-    name: string;
-    email: string;
-    password: string;
-    status: number;  // 1 = activo, 0 = inactivo
-}
-```
-
-### Base de datos (`infraestructure/entities/User.ts`)
-
-| Columna TypeORM | Tipo PostgreSQL | Notas |
-|-----------------|-----------------|-------|
-| `id_user`       | integer (PK, auto) | Generado por la BD |
-| `name_user`     | varchar(255)    | |
-| `email_user`    | varchar(255)    | UNIQUE |
-| `password_user` | varchar(255)    | Texto plano (pendiente hash para producción) |
-| `status_user`   | integer         | Default: 1 |
-
-Tabla: `user` en schema `users` (configurado en `data-base.ts`).
-
-### Transformación Domain ↔ Entity
-
-`UserAdapter` tiene dos métodos privados:
-
-- `toDomain(entity)` → convierte columnas `*_user` a propiedades del dominio.
-- `toEntity(domain)` → convierte dominio a entidad TypeORM para guardar.
+| Tabla | Descripción |
+|-------|-------------|
+| `roles` | admin, reciclador |
+| `users` | Usuarios con `role_id` FK |
+| `auth_sessions` | Sesiones (entidad creada; JWT actual en memoria) |
+| `materials` | Tipos de material reciclable |
+| `recycling_points` | Puntos en el mapa (lat/lng) |
+| `recycling_records` | Historial de reciclaje y puntos |
+| `medals` | Catálogo de medallas |
+| `user_medals` | Medallas ganadas por usuario |
 
 ---
 
 ## Cableado de dependencias
 
-En `UserRoutes.ts` se instancian las capas de abajo hacia arriba:
+Patrón repetido en cada `*Routes.ts`:
 
 ```typescript
-const userAdapter = new UserAdapter();           // infraestructura
-const userApp = new UserApplication(userAdapter); // recibe el puerto
-const userController = new UserController(userApp); // recibe application
+const adapter = new UserAdapter();
+const app = new UserApplication(adapter);
+const controller = new UserController(app);
+
+router.post('/users', (req, res) => controller.createUser(req, res));
 ```
 
-`UserAdapter` implementa `UserPort`, por eso puede inyectarse en `UserApplication`.
+`UserAdapter implements UserPort`, por eso puede inyectarse en `UserApplication` sin acoplar el negocio a TypeORM.
 
 ---
 
-## Configuración y variables de entorno
+## Configuración
 
-`environment-vars.ts` carga `.env` y valida con Joi al iniciar:
+`environment-vars.ts` valida al iniciar:
 
-- Si falta una variable requerida → la app no arranca.
-- `DB_PASSWORD` puede estar vacío (desarrollo local).
-- `DB_PORT` por defecto en Joi: `3306` (convendría cambiar a `5432` para PostgreSQL).
+| Variable | Requerida |
+|----------|-----------|
+| `PORT` | Sí |
+| `DB_HOST`, `DB_USER`, `DB_NAME` | Sí |
+| `DB_PORT` | Sí (default 5432) |
+| `DB_PASSWORD` | Opcional (vacío en local) |
+| `JWT_SECRET` | Sí (mín. 10 caracteres) |
 
-`data-base.ts` crea el `DataSource` de TypeORM con `synchronize: true` en desarrollo.
-
----
-
-## Estado actual del módulo de usuarios
-
-| Funcionalidad | Application | Adapter | Controller | Ruta HTTP |
-|---------------|:-----------:|:-------:|:----------:|:---------:|
-| Crear usuario | ✅ | ✅ | ✅ | ✅ `POST /users` |
-| Listar activos | ✅ | ✅ | ✅ | ✅ `GET /users` |
-| Buscar por ID | ✅ | ✅ | ✅ | ✅ `GET /users/id/:id` |
-| Buscar por email | ✅ | ✅ | ✅ | ✅ `GET /users/email/:email` |
-| Actualizar | ✅ | ✅ | ✅ | ❌ pendiente |
-| Baja lógica | ✅ | ✅ | ✅ | ❌ pendiente |
+`data-base.ts` registra todas las entidades y usa `synchronize: true` solo en desarrollo.
 
 ---
 
-## Próximos módulos (EcoPoint)
+## Estado actual
 
-El mismo patrón se replicará para:
+| Requisito proyecto final | Estado |
+|--------------------------|--------|
+| Arquitectura hexagonal | ✅ |
+| 6 CRUD con baja lógica | ✅ |
+| JWT + bcrypt | ✅ |
+| Validaciones Joi + regex | ✅ |
+| Lógica de negocio (puntos/medallas) | ✅ |
+| Patrón Adapter | ✅ |
+| PostgreSQL | ✅ |
 
-- Puntos de reciclaje (`RecyclingPointPort`, adapter, controller, routes)
-- Gamificación (puntos, medallas, ranking)
-- Autenticación JWT (entregable final del curso)
+---
 
-Cada módulo nuevo = carpeta en `domain/`, clase en `application/`, adapter + controller + routes en `infraestructure/`.
+## Próximo paso
+
+Integración del **frontend** con login y consumo de al menos dos CRUD (`/auth/login`, `/users`, `/recycling-points`).

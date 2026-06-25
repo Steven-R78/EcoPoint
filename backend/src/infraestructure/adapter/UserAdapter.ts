@@ -1,7 +1,7 @@
 import { Repository } from "typeorm";
 import { User, User as UserDomain } from "../../domain/User";
 import { User as UserEntity } from "../entities/User";
-import { UserPort } from "../../domain/UserPort";
+import { UserPort } from "../../domain/port/UserPort";
 import { AppDataSource } from "../config/data-base";
 
 export class UserAdapter implements UserPort {
@@ -20,6 +20,7 @@ export class UserAdapter implements UserPort {
             email: userEntity.email_user,
             password: userEntity.password_user,
             status: userEntity.status_user,
+            roleId: userEntity.role_id,
         }
     }
 
@@ -29,6 +30,7 @@ export class UserAdapter implements UserPort {
         userEntity.email_user = userDomain.email;
         userEntity.password_user = userDomain.password;
         userEntity.status_user = userDomain.status;
+        userEntity.role_id = userDomain.roleId ?? 2;
         return userEntity;
     }
 
@@ -54,6 +56,7 @@ export class UserAdapter implements UserPort {
                 email_user: user.email ?? existingUser.email_user,
                 password_user: user.password ?? existingUser.password_user,
                 status_user: user.status ?? existingUser.status_user,
+                role_id: user.roleId ?? existingUser.role_id,
             });
 
             await this.userRepository.save(existingUser);
@@ -92,13 +95,7 @@ export class UserAdapter implements UserPort {
         const user = await this.userRepository.findOne({ where: { email_user: email } });
         if (!user) return null;
 
-        return {
-            id: user.id_user,
-            name: user.name_user,
-            email: user.email_user,
-            password: user.password_user,
-            status: user.status_user,
-        }
+        return this.toDomain(user);
     }
 
     async getAllUsers(): Promise<User[]> {

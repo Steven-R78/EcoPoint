@@ -1,4 +1,4 @@
-import { User } from "./User";
+import { User } from "../User";
 
 export interface UserPort {
     createUser(user: Omit<User, "id">): Promise<number>;

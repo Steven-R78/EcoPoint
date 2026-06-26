@@ -26,10 +26,10 @@
             <a href="#guia">Guía</a>
             <a href="#comunidad">Comunidad</a>
             <a href="#impacto">ODS</a>
-            <a href="#registro">Mi Perfil</a>
+            <a href="#registro" id="nav-profile">Mi Perfil</a>
         </nav>
 
-        <a href="#registro" class="auth-btn">Login / Registro</a>
+        <a href="#registro" class="auth-btn" id="auth-btn">Login / Registro</a>
     </header>
 
     <!-- ====== CONTENIDO PRINCIPAL ====== -->
@@ -74,6 +74,11 @@
                         referrerpolicy="no-referrer-when-downgrade"
                         src="https://www.google.com/maps?q=Bogot%C3%A1%20Colombia&output=embed">
                     </iframe>
+                </div>
+                <div class="points-panel">
+                    <h3>Puntos de reciclaje en la plataforma</h3>
+                    <p id="points-status" class="points-status" aria-live="polite"></p>
+                    <div id="points-list" class="points-list"></div>
                 </div>
             </div>
         </section>
@@ -163,21 +168,21 @@
         <section class="gamification" id="comunidad">
             <h2>Sistema de Recompensas</h2>
 
-            <div class="gamification-grid">
-                <article class="reward-card points-card">
+            <div class="gamification-grid" id="gamification-grid">
+                <article class="reward-card points-card" id="user-points-card" hidden>
                     <div class="card-title">
                         <span class="title-icon">☆</span>
                         <h3>Tus Puntos</h3>
                     </div>
 
-                    <div class="points-total">1,250</div>
+                    <div class="points-total" id="user-points-total">—</div>
                     <p class="points-label">Puntos totales</p>
 
                     <div class="progress-bar">
-                        <span class="progress-fill"></span>
+                        <span class="progress-fill" id="user-points-progress"></span>
                     </div>
 
-                    <p class="progress-text">750 puntos hasta el próximo nivel</p>
+                    <p class="progress-text" id="user-points-progress-text">Inicia sesión para ver tu progreso</p>
                 </article>
 
                 <article class="reward-card medals-card">
@@ -186,26 +191,8 @@
                         <h3>Medallas</h3>
                     </div>
 
-                    <div class="medals-grid">
-                        <div class="medal-item unlocked">
-                            <span class="medal-icon">☆</span>
-                            <p>Eco Novato</p>
-                        </div>
-
-                        <div class="medal-item unlocked">
-                            <span class="medal-icon">🎖</span>
-                            <p>Reciclador Pro</p>
-                        </div>
-
-                        <div class="medal-item unlocked">
-                            <span class="medal-icon">🏆</span>
-                            <p>Guardián Verde</p>
-                        </div>
-
-                        <div class="medal-item locked">
-                            <span class="medal-icon">↗</span>
-                            <p>Campeón Eco</p>
-                        </div>
+                    <div class="medals-grid" id="medals-grid">
+                        <p class="medals-status">Cargando medallas...</p>
                     </div>
                 </article>
 
@@ -279,8 +266,8 @@
             <div class="form-wrapper">
                 <div class="form-copy">
                     <span class="form-tag">Participa</span>
-                    <h2>Regístrate para unirte a la red EcoPoint</h2>
-                    <p>Déjanos tus datos para recibir rutas de reciclaje, retos sostenibles y recomendaciones según tu zona. El formulario valida la información para mejorar la calidad del registro.</p>
+                    <h2>Únete a la red EcoPoint</h2>
+                    <p>Inicia sesión o crea tu cuenta para acceder a puntos de reciclaje, retos y recompensas. Los datos se guardan en la API del backend.</p>
                     <ul class="form-benefits">
                         <li>Ubica puntos de reciclaje cercanos</li>
                         <li>Recibe retos y recompensas ecológicas</li>
@@ -288,40 +275,52 @@
                     </ul>
                 </div>
 
-                <form class="eco-form" id="eco-form" novalidate>
-                    <div class="form-group">
-                        <label for="nombre">Nombre completo</label>
-                        <input type="text" id="nombre" name="nombre" placeholder="Ej. Laura Martínez" required pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñ ]{3,60}$" aria-describedby="error-nombre">
-                        <small class="error-message" id="error-nombre"></small>
+                <div id="auth-panel" class="auth-panel">
+                    <div class="auth-tabs">
+                        <button type="button" class="auth-tab active" data-auth-tab="login">Iniciar sesión</button>
+                        <button type="button" class="auth-tab" data-auth-tab="register">Registrarse</button>
                     </div>
 
-                    <div class="form-group">
-                        <label for="correo">Correo electrónico</label>
-                        <input type="email" id="correo" name="correo" placeholder="ejemplo@correo.com" required pattern="^[^\\s@]+@[^\\s@]+\\.[^\\s@]{2,}$" aria-describedby="error-correo">
-                        <small class="error-message" id="error-correo"></small>
-                    </div>
+                    <form class="eco-form" id="login-form" novalidate>
+                        <div class="form-group">
+                            <label for="login-email">Correo electrónico</label>
+                            <input type="email" id="login-email" name="email" placeholder="ejemplo@correo.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="login-password">Contraseña</label>
+                            <input type="password" id="login-password" name="password" placeholder="Mínimo 6 caracteres" required minlength="6">
+                        </div>
+                        <button type="submit" class="btn btn-submit">Iniciar sesión</button>
+                        <p class="form-status" id="login-status" aria-live="polite"></p>
+                    </form>
 
-                    <div class="form-group">
-                        <label for="telefono">Teléfono</label>
-                        <input type="tel" id="telefono" name="telefono" placeholder="3001234567" required pattern="^\\d{10}$" aria-describedby="error-telefono">
-                        <small class="error-message" id="error-telefono"></small>
-                    </div>
+                    <form class="eco-form" id="register-form" hidden novalidate>
+                        <div class="form-group">
+                            <label for="register-name">Nombre completo</label>
+                            <input type="text" id="register-name" name="name" placeholder="Ej. Laura Martinez" required minlength="3">
+                        </div>
+                        <div class="form-group">
+                            <label for="register-email">Correo electrónico</label>
+                            <input type="email" id="register-email" name="email" placeholder="ejemplo@correo.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="register-password">Contraseña</label>
+                            <input type="password" id="register-password" name="password" placeholder="Letras y números, mín. 6" required minlength="6" autocomplete="new-password">
+                        </div>
+                        <div class="form-group">
+                            <label for="register-password-confirm">Confirmar contraseña</label>
+                            <input type="password" id="register-password-confirm" name="passwordConfirm" placeholder="Repite tu contraseña" required minlength="6" autocomplete="new-password">
+                        </div>
+                        <button type="submit" class="btn btn-submit">Crear cuenta</button>
+                        <p class="form-status" id="register-status" aria-live="polite"></p>
+                    </form>
+                </div>
 
-                    <div class="form-group">
-                        <label for="ciudad">Ciudad</label>
-                        <input type="text" id="ciudad" name="ciudad" placeholder="Bogotá" required pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñ ]{3,40}$" aria-describedby="error-ciudad">
-                        <small class="error-message" id="error-ciudad"></small>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="mensaje">¿Qué residuo reciclas con más frecuencia?</label>
-                        <textarea id="mensaje" name="mensaje" rows="4" placeholder="Cuéntanos brevemente..." required aria-describedby="error-mensaje"></textarea>
-                        <small class="error-message" id="error-mensaje"></small>
-                    </div>
-
-                    <button type="submit" class="btn btn-submit">Crear perfil ecológico</button>
-                    <p class="form-status" id="form-status" aria-live="polite"></p>
-                </form>
+                <div id="profile-panel" class="profile-panel" hidden>
+                    <h3>Tu perfil</h3>
+                    <div id="profile-info" class="profile-info"></div>
+                    <p class="profile-hint">Sesión activa. Usa "Cerrar sesión" en el menú superior para salir.</p>
+                </div>
             </div>
         </section>
 
@@ -370,8 +369,6 @@
   const guideModalText = document.getElementById('guide-modal-text');
   const guideModalClosers = document.querySelectorAll('[data-close-modal]');
   const breadcrumbCurrent = document.getElementById('breadcrumb-current');
-  const ecoForm = document.getElementById('eco-form');
-  const formStatus = document.getElementById('form-status');
   const breadcrumbMap = {
     '#inicio': 'EcoPoint',
     '#mapa': 'Mapa',
@@ -395,7 +392,7 @@
     });
   });
 
-  document.querySelectorAll('header nav a, .logo-link, .auth-btn, footer a, .hero-buttons a').forEach(link => {
+  document.querySelectorAll('header nav a, .logo-link, #auth-btn, footer a, .hero-buttons a').forEach(link => {
     link.addEventListener('click', () => {
       updateBreadcrumb(link.getAttribute('href'));
     });
@@ -439,75 +436,18 @@
     updateBreadcrumb(window.location.hash);
   });
 
-  const validationRules = {
-    nombre: {
-      regex: /^[A-Za-zÁÉÍÓÚáéíóúÑñ ]{3,60}$/,
-      message: 'Ingresa un nombre válido de 3 a 60 letras.'
-    },
-    correo: {
-      regex: /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/,
-      message: 'Escribe un correo electrónico válido.'
-    },
-    telefono: {
-      regex: /^\d{10}$/,
-      message: 'El teléfono debe tener exactamente 10 dígitos.'
-    },
-    ciudad: {
-      regex: /^[A-Za-zÁÉÍÓÚáéíóúÑñ ]{3,40}$/,
-      message: 'Ingresa una ciudad válida.'
-    },
-    mensaje: {
-      regex: /^.{10,250}$/,
-      message: 'Escribe entre 10 y 250 caracteres.'
-    }
-  };
-
-  const validateField = (field) => {
-    const rule = validationRules[field.name];
-    const errorElement = document.getElementById(`error-${field.name}`);
-    const value = field.value.trim();
-
-    if (!rule || !errorElement) {
-      return true;
-    }
-
-    if (!rule.regex.test(value)) {
-      field.setAttribute('aria-invalid', 'true');
-      errorElement.textContent = rule.message;
-      return false;
-    }
-
-    field.removeAttribute('aria-invalid');
-    errorElement.textContent = '';
-    return true;
-  };
-
-  if (ecoForm) {
-    ecoForm.querySelectorAll('input, textarea').forEach((field) => {
-      field.addEventListener('input', () => validateField(field));
-      field.addEventListener('blur', () => validateField(field));
-    });
-
-    ecoForm.addEventListener('submit', (event) => {
-      event.preventDefault();
-
-      const fields = ecoForm.querySelectorAll('input, textarea');
-      const isValid = [...fields].every((field) => validateField(field));
-
-      if (!isValid) {
-        formStatus.textContent = 'Revisa los campos marcados antes de enviar el formulario.';
-        formStatus.classList.add('is-error');
-        formStatus.classList.remove('is-success');
-        return;
-      }
-
-      formStatus.textContent = 'Registro enviado con éxito. Bienvenido a EcoPoint.';
-      formStatus.classList.add('is-success');
-      formStatus.classList.remove('is-error');
-      ecoForm.reset();
-    });
-  }
-
   updateBreadcrumb(window.location.hash || '#inicio');
+</script>
+<script src="js/config.js"></script>
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/points.js"></script>
+<script src="js/rewards.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    initAuth();
+    initPoints();
+    initRewards();
+  });
 </script>
 </html>

@@ -21,9 +21,9 @@ import { useRoleMode } from '../../hooks/RoleModeContext';
 import useViewModel from './ViewModel';
 import styles from './Styles';
 
-interface Props extends NativeStackScreenProps<RootStackParamList, 'HomeScreen'> {}
+interface Props extends NativeStackScreenProps<RootStackParamList, 'LoginScreen'> {}
 
-export const HomeScreen = ({ navigation }: Props) => {
+export const LoginScreen = ({ navigation }: Props) => {
   const { email, password, errorMessage, user, loading, restoring, onChange, login } =
     useViewModel();
   const { refresh } = useRoleMode();

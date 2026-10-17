@@ -1,5 +1,5 @@
-import { ApiDelivery } from '../../../data/sources/remote/api/ApiDelivery';
-import { ResponseApiDelivery } from '../../../data/sources/remote/models/ResponseApiDelivery';
+import { ApiClient } from '../../../data/sources/remote/api/ApiClient';
+import { ApiResponse } from '../../../data/sources/remote/models/ApiResponse';
 import { AxiosError } from 'axios';
 
 export const CreateRecordUseCase = async (payload: {
@@ -7,9 +7,9 @@ export const CreateRecordUseCase = async (payload: {
   pointId: number;
   pointsEarned?: number;
   photoUrl?: string | null;
-}): Promise<ResponseApiDelivery> => {
+}): Promise<ApiResponse> => {
   try {
-    const response = await ApiDelivery.post('/recycling-records', {
+    const response = await ApiClient.post('/recycling-records', {
       userId: payload.userId,
       pointId: payload.pointId,
       pointsEarned: payload.pointsEarned ?? 50,

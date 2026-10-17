@@ -2,7 +2,7 @@ import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { HomeScreen } from './src/presentation/views/home/Home';
+import { LoginScreen } from './src/presentation/views/login/Login';
 import { RegisterScreen } from './src/presentation/views/register/Register';
 import { CitizenTabs } from './src/presentation/navigator/CitizenTabs';
 import { PointDetailScreen } from './src/presentation/views/points/detail/PointDetail';
@@ -26,8 +26,8 @@ const App = () => {
     <SafeAreaProvider>
       <RoleModeProvider>
         <NavigationContainer>
-          <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName="HomeScreen">
-            <Stack.Screen name="HomeScreen" component={HomeScreen} />
+          <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName="LoginScreen">
+            <Stack.Screen name="LoginScreen" component={LoginScreen} />
             <Stack.Screen
               name="RegisterScreen"
               component={RegisterScreen}

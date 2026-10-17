@@ -30,7 +30,7 @@ const HOST =
 
 export const API_BASE_URL = `http://${HOST}:4000/api`;
 
-const ApiDelivery = axios.create({
+const ApiClient = axios.create({
   baseURL: API_BASE_URL,
   headers: {
     'Content-Type': 'application/json',
@@ -38,7 +38,7 @@ const ApiDelivery = axios.create({
   timeout: 15000,
 });
 
-ApiDelivery.interceptors.request.use(async (config) => {
+ApiClient.interceptors.request.use(async (config) => {
   const { getItem } = LocalStorage();
   const raw = await getItem('user');
   if (raw) {
@@ -50,4 +50,4 @@ ApiDelivery.interceptors.request.use(async (config) => {
   return config;
 });
 
-export { ApiDelivery };
+export { ApiClient };

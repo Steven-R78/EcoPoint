@@ -6,7 +6,7 @@ import { User } from '../../../domain/entities/User';
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-const HomeViewModel = () => {
+const LoginViewModel = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const [restoring, setRestoring] = useState(true);
@@ -68,4 +68,4 @@ const HomeViewModel = () => {
   return { ...values, user, errorMessage, loading, restoring, onChange, login };
 };
 
-export default HomeViewModel;
+export default LoginViewModel;

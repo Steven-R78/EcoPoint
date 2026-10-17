@@ -1,5 +1,5 @@
-import { ResponseApiDelivery } from '../../data/sources/remote/models/ResponseApiDelivery';
+import { ApiResponse } from '../../data/sources/remote/models/ApiResponse';
 
 export interface MaterialRepository {
-  getAll(): Promise<ResponseApiDelivery>;
+  getAll(): Promise<ApiResponse>;
 }

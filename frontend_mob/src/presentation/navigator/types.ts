@@ -1,5 +1,5 @@
 export type RootStackParamList = {
-  HomeScreen: undefined;
+  LoginScreen: undefined;
   RegisterScreen: undefined;
   CitizenScreen: undefined;
   PointsScreen: undefined;

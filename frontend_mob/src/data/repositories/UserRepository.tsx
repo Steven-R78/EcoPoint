@@ -1,8 +1,8 @@
 import { AxiosError } from 'axios';
 import { User } from '../../domain/entities/User';
 import { UserRepository } from '../../domain/repositories/UserRepository';
-import { ApiDelivery } from '../sources/remote/api/ApiDelivery';
-import { ResponseApiDelivery } from '../sources/remote/models/ResponseApiDelivery';
+import { ApiClient } from '../sources/remote/api/ApiClient';
+import { ApiResponse } from '../sources/remote/models/ApiResponse';
 
 const toUser = (raw: any): User => ({
   id: raw.id,
@@ -14,7 +14,7 @@ const toUser = (raw: any): User => ({
   documentNumber: raw.documentNumber ?? null,
 });
 
-const toError = (error: unknown, fallback: string): ResponseApiDelivery => {
+const toError = (error: unknown, fallback: string): ApiResponse => {
   const e = error as AxiosError<any>;
   return {
     success: false,
@@ -23,9 +23,9 @@ const toError = (error: unknown, fallback: string): ResponseApiDelivery => {
 };
 
 export class UserRepositoryImpl implements UserRepository {
-  async getAll(): Promise<ResponseApiDelivery> {
+  async getAll(): Promise<ApiResponse> {
     try {
-      const response = await ApiDelivery.get('/users');
+      const response = await ApiClient.get('/users');
       const users = Array.isArray(response.data) ? response.data.map(toUser) : [];
       return { success: true, message: 'OK', data: users };
     } catch (error) {
@@ -35,16 +35,16 @@ export class UserRepositoryImpl implements UserRepository {
 
   async getById(id: number): Promise<User | null> {
     try {
-      const response = await ApiDelivery.get(`/users/id/${id}`);
+      const response = await ApiClient.get(`/users/id/${id}`);
       return toUser(response.data);
     } catch {
       return null;
     }
   }
 
-  async create(user: Partial<User> & { password?: string }): Promise<ResponseApiDelivery> {
+  async create(user: Partial<User> & { password?: string }): Promise<ApiResponse> {
     try {
-      const response = await ApiDelivery.post('/users', {
+      const response = await ApiClient.post('/users', {
         name: user.name,
         email: user.email,
         password: user.password,
@@ -59,18 +59,18 @@ export class UserRepositoryImpl implements UserRepository {
     }
   }
 
-  async update(id: number, user: Partial<User>): Promise<ResponseApiDelivery> {
+  async update(id: number, user: Partial<User>): Promise<ApiResponse> {
     try {
-      const response = await ApiDelivery.put(`/users/${id}`, user);
+      const response = await ApiClient.put(`/users/${id}`, user);
       return { success: true, message: response.data.message ?? 'Usuario actualizado' };
     } catch (error) {
       return toError(error, 'No se pudo actualizar el usuario');
     }
   }
 
-  async remove(id: number): Promise<ResponseApiDelivery> {
+  async remove(id: number): Promise<ApiResponse> {
     try {
-      const response = await ApiDelivery.delete(`/users/${id}`);
+      const response = await ApiClient.delete(`/users/${id}`);
       return { success: true, message: response.data.message ?? 'Usuario eliminado' };
     } catch (error) {
       return toError(error, 'No se pudo eliminar el usuario');

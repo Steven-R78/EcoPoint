@@ -36,7 +36,7 @@ export const ProfileInfoScreen = ({ navigation }: Props) => {
         onPress: async () => {
           await removeSession();
           await refresh();
-          navigation.reset({ index: 0, routes: [{ name: 'HomeScreen' }] });
+          navigation.reset({ index: 0, routes: [{ name: 'LoginScreen' }] });
         },
       },
     ]);

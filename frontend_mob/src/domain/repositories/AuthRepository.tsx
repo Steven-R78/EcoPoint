@@ -1,7 +1,7 @@
 import { User } from '../entities/User';
-import { ResponseApiDelivery } from '../../data/sources/remote/models/ResponseApiDelivery';
+import { ApiResponse } from '../../data/sources/remote/models/ApiResponse';
 
 export interface AuthRepository {
-  login(email: string, password: string): Promise<ResponseApiDelivery>;
-  register(user: User): Promise<ResponseApiDelivery>;
+  login(email: string, password: string): Promise<ApiResponse>;
+  register(user: User): Promise<ApiResponse>;
 }

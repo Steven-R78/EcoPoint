@@ -1,10 +1,10 @@
 import { AxiosError } from 'axios';
 import { User } from '../../domain/entities/User';
 import { AuthRepository } from '../../domain/repositories/AuthRepository';
-import { ApiDelivery, API_BASE_URL } from '../sources/remote/api/ApiDelivery';
-import { ResponseApiDelivery } from '../sources/remote/models/ResponseApiDelivery';
+import { ApiClient, API_BASE_URL } from '../sources/remote/api/ApiClient';
+import { ApiResponse } from '../sources/remote/models/ApiResponse';
 
-const toError = (error: unknown): ResponseApiDelivery => {
+const toError = (error: unknown): ApiResponse => {
   const e = error as AxiosError<any>;
   const data = e.response?.data;
   const isNetwork = !e.response && (e.code === 'ERR_NETWORK' || e.message === 'Network Error');
@@ -18,9 +18,9 @@ const toError = (error: unknown): ResponseApiDelivery => {
 };
 
 export class AuthRepositoryImpl implements AuthRepository {
-  async register(user: User): Promise<ResponseApiDelivery> {
+  async register(user: User): Promise<ApiResponse> {
     try {
-      const response = await ApiDelivery.post('/users', {
+      const response = await ApiClient.post('/users', {
         name: user.name,
         email: user.email,
         password: user.password,
@@ -40,9 +40,9 @@ export class AuthRepositoryImpl implements AuthRepository {
     }
   }
 
-  async login(email: string, password: string): Promise<ResponseApiDelivery> {
+  async login(email: string, password: string): Promise<ApiResponse> {
     try {
-      const response = await ApiDelivery.post('/auth/login', { email, password });
+      const response = await ApiClient.post('/auth/login', { email, password });
       const { token, user, message } = response.data;
       return {
         success: true,

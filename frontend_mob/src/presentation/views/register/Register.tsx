@@ -48,7 +48,7 @@ export const RegisterScreen = ({ navigation }: Props) => {
 
   useEffect(() => {
     if (successMessage) {
-      navigation.navigate('HomeScreen');
+      navigation.navigate('LoginScreen');
     }
   }, [successMessage]);
 
@@ -159,7 +159,7 @@ export const RegisterScreen = ({ navigation }: Props) => {
 
           <View style={styles.footer}>
             <Text style={styles.footerText}>¿Ya tienes cuenta?</Text>
-            <TouchableOpacity disabled={loading} onPress={() => navigation.navigate('HomeScreen')}>
+            <TouchableOpacity disabled={loading} onPress={() => navigation.navigate('LoginScreen')}>
               <Text style={styles.link}>Iniciar sesión</Text>
             </TouchableOpacity>
           </View>

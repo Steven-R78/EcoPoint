@@ -1,10 +1,10 @@
 import { RecyclingPoint } from '../entities/RecyclingPoint';
-import { ResponseApiDelivery } from '../../data/sources/remote/models/ResponseApiDelivery';
+import { ApiResponse } from '../../data/sources/remote/models/ApiResponse';
 
 export interface PointRepository {
-  getAll(): Promise<ResponseApiDelivery>;
+  getAll(): Promise<ApiResponse>;
   getById(id: number): Promise<RecyclingPoint | null>;
-  create(point: Omit<RecyclingPoint, 'id' | 'distanceKm'>): Promise<ResponseApiDelivery>;
-  update(id: number, point: Partial<RecyclingPoint>): Promise<ResponseApiDelivery>;
-  remove(id: number): Promise<ResponseApiDelivery>;
+  create(point: Omit<RecyclingPoint, 'id' | 'distanceKm'>): Promise<ApiResponse>;
+  update(id: number, point: Partial<RecyclingPoint>): Promise<ApiResponse>;
+  remove(id: number): Promise<ApiResponse>;
 }

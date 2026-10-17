@@ -6,6 +6,8 @@ export type ReturnUserData = {
     password: string;
     status: number;
     roleId: number;
+    documentType: string | null;
+    documentNumber: string | null;
 }
 
 type ValidateUserData = {
@@ -18,13 +20,13 @@ function validateUserData(data: any): ValidateUserData {
         name: joi.string()
             .trim()
             .min(3)
-            .pattern(/^[A-Za-zÁÉÍÓÚáéíóúÑñ]+(?:\s[A-Za-zÁÉÍÓÚáéíóúÑñ]+)?$/)
+            .pattern(/^[A-Za-zÁÉÍÓÚáéíóúÑñ]+(?:\s[A-Za-zÁÉÍÓÚáéíóúÑñ]+)*$/)
             .required()
             .messages({
                 "string.base": "El nombre debe ser un texto",
                 "string.empty": "El nombre es requerido",
                 "string.min": "El nombre debe tener al menos 3 caracteres",
-                "string.pattern.base": "El nombre solo puede contener letras y un espacio",
+                "string.pattern.base": "El nombre solo puede contener letras y espacios",
             }),
         email: joi.string()
             .email({ tlds: { allow: false}})
@@ -56,7 +58,29 @@ function validateUserData(data: any): ValidateUserData {
             .messages({
                 "number.base": "El rol debe ser numerico",
                 "any.only": "El rol debe ser 1 (admin) o 2 (reciclador)",
-            })
+            }),
+        documentType: joi.string()
+            .trim()
+            .valid(
+                'Cédula de ciudadanía',
+                'Tarjeta de identidad',
+                'Pasaporte',
+                'Cédula de extranjería',
+            )
+            .allow(null, '')
+            .optional()
+            .messages({
+                "any.only": "Tipo de documento no valido",
+            }),
+        documentNumber: joi.string()
+            .trim()
+            .max(30)
+            .pattern(/^[A-Za-z0-9.\-]*$/)
+            .allow(null, '')
+            .optional()
+            .messages({
+                "string.pattern.base": "El numero de documento no es valido",
+            }),
     }).unknown(false)
 
     const {error, value} = schema.validate(data,{abortEarly:false})
@@ -69,5 +93,10 @@ export const loadUserData = (data: any): ReturnUserData => {
         const message = result.error.details.map(d => d.message).join(", ")
         throw new Error(message);
     }
-    return result.value
+    const value = result.value;
+    return {
+        ...value,
+        documentType: value.documentType ? value.documentType : null,
+        documentNumber: value.documentNumber ? value.documentNumber : null,
+    };
 }

@@ -17,8 +17,15 @@ export class RecyclingPointApplication {
         }
     }
 
+    private async validateMaterials(materialIds: number[] = []): Promise<void> {
+        for (const materialId of materialIds) {
+            await this.validateMaterial(materialId);
+        }
+    }
+
     async createPoint(point: Omit<RecyclingPoint, "id">): Promise<number> {
         await this.validateMaterial(point.materialId);
+        await this.validateMaterials(point.materialIds);
         return this.port.createPoint(point);
     }
 
@@ -38,6 +45,9 @@ export class RecyclingPointApplication {
 
         if (point.materialId !== undefined) {
             await this.validateMaterial(point.materialId);
+        }
+        if (point.materialIds !== undefined) {
+            await this.validateMaterials(point.materialIds);
         }
 
         return this.port.updatePoint(id, point);

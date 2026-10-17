@@ -19,4 +19,7 @@ export class RecyclingRecord {
 
     @Column({ type: 'integer', default: 1 })
     status_record!: number;
+
+    @Column({ type: 'varchar', length: 500, nullable: true })
+    photo_url!: string | null;
 }

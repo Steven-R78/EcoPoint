@@ -2,11 +2,14 @@ import joi from 'joi';
 
 export type ReturnUpdateRecyclingPointData = Partial<{
     materialId: number | null;
+    materialIds: number[];
     name: string;
     address: string;
     latitude: number;
     longitude: number;
     status: number;
+    schedule: string | null;
+    photoUrl: string | null;
 }>;
 
 type ValidateUpdateRecyclingPointData = {
@@ -63,9 +66,12 @@ function validateUpdateRecyclingPointData(data: unknown): ValidateUpdateRecyclin
                 "number.base": "El estado debe ser numerico",
                 "any.only": "El estado debe ser 0 o 1",
             }),
+        materialIds: joi.array().items(joi.number().integer().positive()),
+        schedule: joi.string().trim().max(120).allow('', null),
+        photoUrl: joi.string().trim().max(500).allow('', null),
     })
         .unknown(false)
-        .or("materialId", "name", "address", "latitude", "longitude", "status");
+        .or("materialId", "materialIds", "name", "address", "latitude", "longitude", "status", "schedule", "photoUrl");
 
     const { error, value } = schema.validate(data, {
         abortEarly: false,

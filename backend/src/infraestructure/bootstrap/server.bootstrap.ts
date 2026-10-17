@@ -14,9 +14,10 @@ export class ServerBootstrap {
             const server = http.createServer(this.app);
             const PORT = Number(envs.PORT ?? 4000);
 
-            server.listen(PORT)
+            server.listen(PORT, '0.0.0.0')
             .on('listening', () => {
                 console.log(`Server is running on http://localhost:${PORT}`);
+                console.log(`LAN: http://<tu-IPv4>:${PORT} (Expo Go en el celular)`);
                 resolve(true);
             })
             .on('error', (err) => {

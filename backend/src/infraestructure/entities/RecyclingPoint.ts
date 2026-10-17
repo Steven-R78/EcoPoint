@@ -22,4 +22,10 @@ export class RecyclingPoint {
 
     @Column({ type: 'integer', default: 1 })
     status_point!: number;
+
+    @Column({ type: 'varchar', length: 120, nullable: true })
+    schedule_point!: string | null;
+
+    @Column({ type: 'varchar', length: 500, nullable: true })
+    photo_url!: string | null;
 }

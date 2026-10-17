@@ -1,0 +1,75 @@
+import { StyleSheet } from 'react-native';
+import { MyColors } from '../../theme/AppTheme';
+
+const HomeStyles = StyleSheet.create({
+  container: { flex: 1, backgroundColor: MyColors.background, overflow: 'hidden' },
+  blob: {
+    position: 'absolute',
+    width: 260,
+    height: 260,
+    borderRadius: 130,
+    backgroundColor: '#E9F8EF',
+    top: -90,
+    right: -90,
+  },
+  keyboard: { flex: 1 },
+  scroll: { flexGrow: 1, paddingHorizontal: 28, paddingTop: 12, paddingBottom: 28 },
+  brandRow: { flexDirection: 'row', alignItems: 'center' },
+  logoWrap: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: MyColors.primary,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  brandCopy: { marginLeft: 10 },
+  brand: { fontSize: 20, fontWeight: '700', color: '#111827' },
+  slogan: { marginTop: 1, color: MyColors.muted, fontSize: 12 },
+  eyebrow: {
+    marginTop: 42,
+    color: '#9CA3AF',
+    fontSize: 11,
+    fontWeight: '700',
+    letterSpacing: 1.4,
+  },
+  title: {
+    marginTop: 10,
+    fontSize: 34,
+    fontWeight: '800',
+    color: '#111827',
+    lineHeight: 40,
+  },
+  subtitle: {
+    marginTop: 12,
+    color: '#9CA3AF',
+    fontSize: 15,
+    lineHeight: 22,
+    marginBottom: 28,
+  },
+  card: {
+    backgroundColor: '#fff',
+    borderRadius: 28,
+    paddingHorizontal: 20,
+    paddingTop: 22,
+    paddingBottom: 24,
+    shadowColor: '#1F2937',
+    shadowOpacity: 0.08,
+    shadowRadius: 24,
+    shadowOffset: { width: 0, height: 10 },
+    elevation: 4,
+  },
+  error: { color: MyColors.danger, marginBottom: 12, fontWeight: '600' },
+  forgot: { alignSelf: 'flex-end', marginTop: -4, marginBottom: 18 },
+  forgotText: { color: '#9CA3AF', fontSize: 13 },
+  footer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginTop: 22,
+  },
+  footerText: { color: '#9CA3AF', fontSize: 13 },
+  link: { color: MyColors.primaryDark, fontWeight: '700', marginLeft: 4, fontSize: 13 },
+  restoring: { alignItems: 'center', justifyContent: 'center' },
+});
+
+export default HomeStyles;

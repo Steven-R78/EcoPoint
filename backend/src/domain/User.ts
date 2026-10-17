@@ -5,4 +5,6 @@ export interface User {
     password: string;
     status: number;
     roleId: number;
+    documentType: string | null;
+    documentNumber: string | null;
 }

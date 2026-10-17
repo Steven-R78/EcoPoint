@@ -19,4 +19,10 @@ export class User {
 
     @Column( { type: 'integer', default: 2 } )
     role_id!: number;
+
+    @Column({ type: 'character varying', length: 50, nullable: true })
+    document_type!: string | null;
+
+    @Column({ type: 'character varying', length: 30, nullable: true })
+    document_number!: string | null;
 }

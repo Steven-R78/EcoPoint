@@ -1,0 +1,54 @@
+{
+  "expo": {
+    "name": "EcoPoint Móvil",
+    "slug": "frontend_mob",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "plugins": [
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "EcoPoint usa tu ubicación para mostrar puntos cercanos."
+        }
+      ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "EcoPoint usa la cámara para registrar tu aporte de reciclaje.",
+          "recordAudioAndroid": false,
+          "barcodeScannerEnabled": false
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "EcoPoint accede a tus fotos para adjuntar evidencia de reciclaje."
+        }
+      ]
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "EcoPoint usa tu ubicación para mostrar puntos cercanos.",
+        "NSCameraUsageDescription": "EcoPoint usa la cámara para registrar tu aporte de reciclaje.",
+        "NSPhotoLibraryUsageDescription": "EcoPoint accede a tus fotos para adjuntar evidencia de reciclaje."
+      }
+    },
+    "android": {
+      "permissions": ["ACCESS_COARSE_LOCATION", "ACCESS_FINE_LOCATION", "CAMERA"],
+      "usesCleartextTraffic": true,
+      "adaptiveIcon": {
+        "backgroundColor": "#E6F4FE",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "predictiveBackGestureEnabled": false
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    }
+  }
+}

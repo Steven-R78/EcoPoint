@@ -2,11 +2,14 @@ import joi from 'joi';
 
 export type ReturnRecyclingPointData = {
     materialId: number | null;
+    materialIds: number[];
     name: string;
     address: string;
     latitude: number;
     longitude: number;
     status: number;
+    schedule: string | null;
+    photoUrl: string | null;
 };
 
 type ValidateRecyclingPointData = {
@@ -72,6 +75,9 @@ function validateRecyclingPointData(data: unknown): ValidateRecyclingPointData {
                 "number.base": "El estado debe ser numerico",
                 "any.only": "El estado debe ser 0 o 1",
             }),
+        materialIds: joi.array().items(joi.number().integer().positive()).default([]),
+        schedule: joi.string().trim().max(120).allow('', null).optional(),
+        photoUrl: joi.string().trim().max(500).allow('', null).optional(),
     }).unknown(false);
 
     const { error, value } = schema.validate(data, { abortEarly: false });
@@ -84,5 +90,15 @@ export const loadRecyclingPointData = (data: unknown): ReturnRecyclingPointData 
         const message = result.error.details.map((d) => d.message).join(", ");
         throw new Error(message);
     }
-    return result.value;
+    const value = result.value;
+    const materialIds = value.materialIds?.length
+        ? value.materialIds
+        : (value.materialId ? [value.materialId] : []);
+    return {
+        ...value,
+        materialIds,
+        materialId: value.materialId ?? materialIds[0] ?? null,
+        schedule: value.schedule ? value.schedule : null,
+        photoUrl: value.photoUrl ? value.photoUrl : null,
+    };
 };

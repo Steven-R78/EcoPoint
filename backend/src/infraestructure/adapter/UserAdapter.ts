@@ -21,6 +21,8 @@ export class UserAdapter implements UserPort {
             password: userEntity.password_user,
             status: userEntity.status_user,
             roleId: userEntity.role_id,
+            documentType: userEntity.document_type ?? null,
+            documentNumber: userEntity.document_number ?? null,
         }
     }
 
@@ -31,6 +33,8 @@ export class UserAdapter implements UserPort {
         userEntity.password_user = userDomain.password;
         userEntity.status_user = userDomain.status;
         userEntity.role_id = userDomain.roleId ?? 2;
+        userEntity.document_type = userDomain.documentType ?? null;
+        userEntity.document_number = userDomain.documentNumber ?? null;
         return userEntity;
     }
 
@@ -57,6 +61,12 @@ export class UserAdapter implements UserPort {
                 password_user: user.password ?? existingUser.password_user,
                 status_user: user.status ?? existingUser.status_user,
                 role_id: user.roleId ?? existingUser.role_id,
+                document_type: user.documentType !== undefined
+                    ? user.documentType
+                    : existingUser.document_type,
+                document_number: user.documentNumber !== undefined
+                    ? user.documentNumber
+                    : existingUser.document_number,
             });
 
             await this.userRepository.save(existingUser);

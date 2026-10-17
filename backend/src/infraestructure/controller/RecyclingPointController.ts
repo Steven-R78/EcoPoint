@@ -13,15 +13,18 @@ export class RecyclingPointController {
 
     async createPoint(req: Request, res: Response): Promise<Response> {
         try {
-            const { materialId, name, address, latitude, longitude, status } = loadRecyclingPointData(req.body);
+            const data = loadRecyclingPointData(req.body);
 
             const point: Omit<RecyclingPoint, "id"> = {
-                materialId,
-                name,
-                address,
-                latitude,
-                longitude,
-                status,
+                materialId: data.materialId,
+                materialIds: data.materialIds,
+                name: data.name,
+                address: data.address,
+                latitude: data.latitude,
+                longitude: data.longitude,
+                status: data.status,
+                schedule: data.schedule,
+                photoUrl: data.photoUrl,
             };
             const pointId = await this.app.createPoint(point);
 

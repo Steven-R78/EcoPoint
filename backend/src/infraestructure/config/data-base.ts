@@ -8,6 +8,7 @@ import { RecyclingRecord } from '../entities/RecyclingRecord';
 import { Medal } from '../entities/Medal';
 import { UserMedal } from '../entities/UserMedal';
 import { AuthSession } from '../entities/AuthSession';
+import { PointMaterial } from '../entities/PointMaterial';
 import envs from './environment-vars';
 
 dotenv.config();
@@ -27,6 +28,7 @@ export const AppDataSource = new DataSource({
         AuthSession,
         Material,
         RecyclingPoint,
+        PointMaterial,
         RecyclingRecord,
         Medal,
         UserMedal,
@@ -47,13 +49,20 @@ async function seedInitialData() {
     }
 
     const materialRepo = AppDataSource.getRepository(Material);
-    if (await materialRepo.count() === 0) {
-        await materialRepo.save([
-            { name_material: 'Plastico', category_material: 'Envases', status_material: 1 },
-            { name_material: 'Papel y carton', category_material: 'Papel', status_material: 1 },
-            { name_material: 'Vidrio', category_material: 'Envases', status_material: 1 },
-            { name_material: 'Metal', category_material: 'Latas', status_material: 1 },
-        ]);
+    const defaultMaterials = [
+        { name_material: 'Plastico', category_material: 'Envases' },
+        { name_material: 'Papel y carton', category_material: 'Papel' },
+        { name_material: 'Vidrio', category_material: 'Envases' },
+        { name_material: 'Metal', category_material: 'Latas' },
+        { name_material: 'Organicos', category_material: 'Organicos' },
+        { name_material: 'RAEE', category_material: 'Electronicos' },
+        { name_material: 'Carton', category_material: 'Papel' },
+    ];
+    for (const material of defaultMaterials) {
+        const exists = await materialRepo.findOne({ where: { name_material: material.name_material } });
+        if (!exists) {
+            await materialRepo.save({ ...material, status_material: 1 });
+        }
     }
 
     const medalRepo = AppDataSource.getRepository(Medal);

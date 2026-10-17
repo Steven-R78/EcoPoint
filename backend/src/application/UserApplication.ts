@@ -38,6 +38,8 @@ export class UserApplication {
             email: user.email,
             status: user.status,
             roleId: user.roleId,
+            documentType: user.documentType,
+            documentNumber: user.documentNumber,
         };
     }
 

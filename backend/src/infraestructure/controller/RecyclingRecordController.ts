@@ -9,9 +9,9 @@ export class RecyclingRecordController {
 
     async createRecord(req: Request, res: Response): Promise<Response> {
         try {
-            const { userId, pointId, pointsEarned, status } = loadRecyclingRecordData(req.body);
+            const { userId, pointId, pointsEarned, status, photoUrl } = loadRecyclingRecordData(req.body);
             const record: Omit<RecyclingRecord, "id" | "recycledAt"> = {
-                userId, pointId, pointsEarned, status,
+                userId, pointId, pointsEarned, status, photoUrl,
             };
             const result = await this.app.createRecord(record);
             return res.status(201).json({

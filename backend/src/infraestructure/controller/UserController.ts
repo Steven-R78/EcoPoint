@@ -20,9 +20,9 @@ export class UserController {
     async createUser(req: Request, res: Response): Promise<Response> {
         try {
             // Validar datos de entrada
-            const {name, email, password, status, roleId} = loadUserData(req.body)
+            const {name, email, password, status, roleId, documentType, documentNumber} = loadUserData(req.body)
 
-            const user: Omit<User, "id"> = {name, email, password, status, roleId};
+            const user: Omit<User, "id"> = {name, email, password, status, roleId, documentType, documentNumber};
             const userId = await this.app.createUser(user);
             
             return res

@@ -31,6 +31,7 @@ export class RecyclingRecordAdapter implements RecyclingRecordPort {
             pointsEarned: entity.points_earned,
             recycledAt: entity.recycled_at,
             status: entity.status_record,
+            photoUrl: entity.photo_url ?? null,
         };
     }
 
@@ -40,6 +41,7 @@ export class RecyclingRecordAdapter implements RecyclingRecordPort {
         entity.point_id = domain.pointId;
         entity.points_earned = domain.pointsEarned;
         entity.status_record = domain.status;
+        entity.photo_url = domain.photoUrl ?? null;
         return entity;
     }
 
@@ -113,6 +115,7 @@ export class RecyclingRecordAdapter implements RecyclingRecordPort {
                 point_id: record.pointId ?? existing.point_id,
                 points_earned: record.pointsEarned ?? existing.points_earned,
                 status_record: record.status ?? existing.status_record,
+                photo_url: record.photoUrl !== undefined ? record.photoUrl : existing.photo_url,
             });
 
             await this.recordRepository.save(existing);

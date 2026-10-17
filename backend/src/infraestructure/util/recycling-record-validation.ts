@@ -5,6 +5,7 @@ export type ReturnRecyclingRecordData = {
     pointId: number;
     pointsEarned: number;
     status: number;
+    photoUrl: string | null;
 };
 
 function validateRecyclingRecordData(data: unknown) {
@@ -36,6 +37,7 @@ function validateRecyclingRecordData(data: unknown) {
             .messages({
                 "any.only": "El estado debe ser 0 o 1",
             }),
+        photoUrl: joi.string().trim().max(500).allow('', null).optional(),
     }).unknown(false);
 
     return schema.validate(data, { abortEarly: false });
@@ -46,5 +48,8 @@ export const loadRecyclingRecordData = (data: unknown): ReturnRecyclingRecordDat
     if (error) {
         throw new Error(error.details.map((d) => d.message).join(", "));
     }
-    return value;
+    return {
+        ...value,
+        photoUrl: value.photoUrl ? value.photoUrl : null,
+    };
 };

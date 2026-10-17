@@ -5,4 +5,5 @@ export interface RecyclingRecord {
     pointsEarned: number;
     recycledAt: Date;
     status: number;
+    photoUrl: string | null;
 }

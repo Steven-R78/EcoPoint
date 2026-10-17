@@ -5,6 +5,7 @@ export type ReturnUpdateRecyclingRecordData = Partial<{
     pointId: number;
     pointsEarned: number;
     status: number;
+    photoUrl: string | null;
 }>;
 
 function validateUpdateRecyclingRecordData(data: unknown) {
@@ -13,9 +14,10 @@ function validateUpdateRecyclingRecordData(data: unknown) {
         pointId: joi.number().integer().positive(),
         pointsEarned: joi.number().integer().positive(),
         status: joi.number().valid(0, 1),
+        photoUrl: joi.string().trim().max(500).allow('', null),
     })
         .unknown(false)
-        .or("userId", "pointId", "pointsEarned", "status");
+        .or("userId", "pointId", "pointsEarned", "status", "photoUrl");
 
     return schema.validate(data, { abortEarly: false, stripUnknown: true, convert: true });
 }
